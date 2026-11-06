@@ -1,0 +1,52 @@
+/* Тренажёр 6 «Уравнения и системы» — на общих токенах al.css */
+.t6 .seg{display:flex;gap:4px;flex-wrap:wrap;background:var(--sheet);border:1px solid var(--rule);border-radius:10px;padding:4px;align-self:flex-start}
+.t6 .seg button{border:0;background:none;border-radius:7px;padding:8px 14px;cursor:pointer;font-weight:500;color:var(--ink-soft);display:inline-flex;gap:8px;align-items:center}
+.t6 .seg button[aria-selected=true]{background:var(--accent);color:var(--sheet)}
+.t6 .seg button[aria-selected=true] .pill{background:var(--sheet);color:var(--accent)}
+.t6 .pill.ok{background:var(--accent-soft);color:var(--accent)}
+.t6.exam .seg,.t6.exam .x6-pr,.t6.mode-ch .x6-sy{display:none}
+.t6 .t6-col{display:flex;flex-direction:column;gap:16px}
+.t6 .t6-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:900px){.t6 .t6-grid{grid-template-columns:minmax(0,1fr)}}
+
+.t6 .eqs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;counter-reset:eq}
+.t6 .eqs li{counter-increment:eq;display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;padding:10px 12px 10px 40px;border-radius:8px;border:1px solid var(--rule);position:relative}
+.t6 .eqs li::before{content:counter(eq);position:absolute;left:12px;top:10px;font-family:var(--f-mono);font-weight:700;color:var(--ink-soft)}
+.t6 .eqs li.cur{border-color:var(--accent);background:var(--accent-soft)} .t6 .eqs li.cur::before{color:var(--accent)}
+.t6 .eqs li.done{opacity:.7} .t6 .eqs li.done::before{content:"✓";color:var(--ok)}
+.t6 .eqt{font-family:var(--f-mono);font-size:clamp(16px,2.2vw,19px);font-weight:600;overflow-wrap:anywhere}
+.t6 .eqs-s{font-size:12px;color:var(--ink-soft)}
+.t6 .countbox{margin-top:16px;padding-top:14px;border-top:1px dashed var(--rule);display:flex;flex-direction:column;gap:8px}
+.t6 .countbox label{font-weight:600}
+.t6 .countbox input,.t6 .total input{width:6em;font-family:var(--f-mono);font-size:17px;padding:7px 10px;border:1.5px solid var(--rule);border-radius:7px;background:var(--sheet)}
+
+.t6 .t6tt tbody tr[tabindex]{cursor:pointer}
+.t6 .t6tt tbody tr[tabindex]:hover td{background:var(--accent-soft)}
+.t6 .t6tt tbody tr:focus-visible td{outline:2px solid var(--accent);outline-offset:-2px}
+.t6 .t6tt th.st,.t6 .t6tt td.st{min-width:90px;text-align:left;padding-left:10px;border-left:1px solid var(--rule)}
+.t6 .t6tt tr.gone td{color:var(--ink-soft);text-decoration:line-through;background:color-mix(in srgb,var(--rule) 25%,transparent)}
+.t6 .t6tt tr.gone td.st{text-decoration:none}
+.t6 .t6tt tr.sel td{background:var(--bad-soft);text-decoration:line-through;text-decoration-color:var(--bad)}
+.t6 .t6tt tr.sel td.st{text-decoration:none}
+.t6 .t6tt tr.bad td{outline:2px solid var(--bad);outline-offset:-2px}
+.t6 .t6tt tr.miss td{box-shadow:inset 0 0 0 2px var(--live)}
+
+.t6 .chain-sys{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:baseline}
+.t6 .chain-sys .ce{font-family:var(--f-mono);font-size:clamp(16px,2.2vw,19px);font-weight:600}
+.t6 .chain-sys .dots{font-family:var(--f-mono);font-size:20px;color:var(--ink-soft)}
+.t6 table.trt{border-collapse:separate;border-spacing:6px;font-family:var(--f-mono)}
+.t6 .trt th{font-size:14px;color:var(--ink-soft);padding:2px 6px}
+.t6 .trb{min-width:84px;height:40px;border-radius:8px;border:1.5px dashed var(--rule);background:var(--sheet);cursor:pointer;font-family:var(--f-body);font-weight:600;color:var(--ink-soft)}
+.t6 .trb.yes{border-style:solid;border-color:var(--ok);background:var(--ok-soft);color:var(--ok)}
+.t6 .trb.no{border-style:solid;border-color:var(--bad);background:var(--bad-soft);color:var(--bad)}
+.t6 .trb:disabled{cursor:default}
+.t6 .trf{margin:10px 0 0;font-size:14px;color:var(--ink-soft)}
+.t6 .trf b{font-family:var(--f-mono);color:var(--ink)}
+.t6 #x6DpCard.locked .wait{color:var(--ink-soft);font-family:var(--f-body);text-align:left;border:0}
+.t6 table.dp{border-collapse:separate;border-spacing:4px;font-family:var(--f-mono)}
+.t6 .dp th{font-size:14px;color:var(--ink-soft);padding:2px 4px;white-space:nowrap}
+.t6 .dpi{width:3.6em;font-family:var(--f-mono);font-size:16px;font-weight:600;text-align:center;padding:7px 2px;border:1.5px solid var(--rule);border-radius:7px;background:var(--sheet);font-variant-numeric:tabular-nums}
+.t6 .dpi:focus{border-color:var(--accent);outline:none}
+.t6 .dpi.bad{border-color:var(--bad);background:var(--bad-soft)}
+.t6 .total{margin-top:12px;gap:10px}
+.t6 .total label{font-weight:600}

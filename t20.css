@@ -1,0 +1,26 @@
+/* Тренажёр ЕГЭ №2 — на общих токенах al.css */
+.t20.exam .x20-pr{display:none}
+.t20 .t20-grid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:900px){.t20 .t20-grid{grid-template-columns:minmax(0,1fr)}}
+.t20 aside .body p{margin:0 0 10px;max-width:60ch}
+.t20 .cond{margin:0 0 12px;max-width:70ch}
+.t20 .f20{font-family:var(--f-mono);font-size:clamp(16px,2.4vw,21px);font-weight:600;padding:12px 16px;border-left:4px solid var(--accent);background:var(--accent-soft);border-radius:0 10px 10px 0;overflow-wrap:anywhere}
+.t20 .f20 .en{color:var(--live)}
+.t20 .hl-t{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--ink-soft);margin-bottom:12px}
+.t20 .t20tt th{padding:4px 4px 8px}
+.t20 .vs{font-family:var(--f-mono);font-size:17px;font-weight:700;padding:5px 6px;border:1.5px solid var(--accent);border-radius:7px;background:var(--accent-soft);color:var(--accent);min-width:58px}
+.t20 .vs.dup{border-color:var(--bad);background:var(--bad-soft);color:var(--bad)}
+.t20 .t20tt td{min-width:58px;font-size:17px}
+.t20 .t20tt td.blank{background:repeating-linear-gradient(45deg,transparent 0 5px,color-mix(in srgb,var(--rule) 40%,transparent) 5px 7px)}
+.t20 .t20tt th.f,.t20 .t20tt td.fv{border-left:2px solid var(--ink)}
+.t20 .t20tt td.fv{font-weight:700;color:var(--live)}
+.t20 .t20tt th.lv,.t20 .t20tt td.lv{font-family:var(--f-body);font-size:12.5px;text-align:left;padding:0 10px;min-width:110px;border-left:1px solid var(--rule)}
+.t20 .t20tt tr.ok td.lv{color:var(--ok)} .t20 .t20tt tr.bad td{background:var(--bad-soft)} .t20 .t20tt tr.bad td.lv{color:var(--bad)}
+.t20 .ansline{font-size:15px;margin:12px 0 0}
+.t20 .ansline b{font-family:var(--f-mono);font-size:20px;letter-spacing:.12em;color:var(--accent)}
+.t20 .ansline .no{color:var(--bad);font-size:13px}
+.t20 .t20x{margin-top:14px}
+.t20 .t20x th.st{font-size:12px;font-weight:600;border-left:1px dashed var(--rule);padding:4px 8px;white-space:nowrap}
+.t20 .t20x td.stv{border-left:1px dashed var(--rule);color:var(--ink-soft)}
+.t20 .t20x td.filled{text-decoration:underline;text-decoration-color:var(--live);text-decoration-thickness:2px;color:var(--live)}
+.t20 .t20x th.f,.t20 .t20x td.fv{border-left:2px solid var(--ink)}

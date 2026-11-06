@@ -234,7 +234,7 @@ function checkTr(){
 
 /* ---------- зачёт ---------- */
 function startExam(){
-  const sh=a=>a.slice().sort(()=>Math.random()-.5);
+  const sh=a=>AL.shuffle(a);
   const cl=[...['T','F','N'].map(k=>sh(CL.filter(x=>x.k===k))[0])];
   sh(CL).forEach(x=>{if(cl.length<5&&!cl.includes(x))cl.push(x)});
   const tr=[sh(TR.filter(x=>x.hard))[0]];sh(TR.filter(x=>!x.hard)).slice(0,2).forEach(x=>tr.push(x));

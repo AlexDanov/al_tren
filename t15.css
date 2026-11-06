@@ -1,0 +1,40 @@
+/* Тренажёр ЕГЭ №15 — на общих токенах al.css */
+.t15 .seg{display:flex;gap:4px;flex-wrap:wrap;background:var(--sheet);border:1px solid var(--rule);border-radius:10px;padding:4px;align-self:flex-start}
+.t15 .seg button{border:0;background:none;border-radius:7px;padding:8px 14px;cursor:pointer;font-weight:500;color:var(--ink-soft);display:inline-flex;gap:8px;align-items:center}
+.t15 .seg button[aria-selected=true]{background:var(--accent);color:var(--sheet)}
+.t15 .seg button[aria-selected=true] .pill{background:var(--sheet);color:var(--accent)}
+.t15 .pill.ok{background:var(--accent-soft);color:var(--accent)}
+.t15.exam .seg,.t15.exam .x15-pr{display:none}
+.t15 .f15{font-family:var(--f-mono);font-size:clamp(16px,2.4vw,21px);font-weight:600;padding:14px 16px;border-left:4px solid var(--accent);background:var(--accent-soft);border-radius:0 10px 10px 0;overflow-wrap:anywhere}
+.t15 .q15{margin:12px 0 0;max-width:70ch}
+.t15 .hl-t{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--ink-soft);margin-bottom:12px}
+
+.t15 svg.nl{display:block;width:100%;min-width:560px;height:auto;touch-action:none}
+.t15 .nl .ax{stroke:var(--ink);stroke-width:2}
+.t15 .nl .tk{stroke:var(--ink-soft);stroke-width:1.2}
+.t15 .nl .tl{font-family:var(--f-mono);font-size:11px;fill:var(--ink-soft);text-anchor:middle}
+.t15 .nl .sb{stroke-width:6;stroke-linecap:round}
+.t15 .nl .sb.p{stroke:var(--accent)} .t15 .nl .sb.q{stroke:var(--inv)} .t15 .nl .sb.a{stroke:var(--live);stroke-width:8}
+.t15 .nl .se{fill:var(--sheet);stroke-width:2} .t15 .nl .se.p{stroke:var(--accent)} .t15 .nl .se.q{stroke:var(--inv)}
+.t15 .nl .sl{font-family:var(--f-mono);font-weight:700;font-size:13px;text-anchor:end}
+.t15 .nl .sl.p{fill:var(--accent)} .t15 .nl .sl.q{fill:var(--inv)} .t15 .nl .sl.a{fill:var(--live)}
+.t15 .nl .hd{fill:var(--glow);stroke:var(--live);stroke-width:2.5;cursor:ew-resize}
+.t15 .nl .hd:focus-visible{stroke:var(--accent);stroke-width:3.5;outline:none}
+.t15 .nl .bad{fill:var(--bad);opacity:.55}
+.t15 .actrl{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;margin-top:12px;font-family:var(--f-mono)}
+.t15 .actrl input{width:5em;font-family:var(--f-mono);font-size:16px;padding:6px 8px;border:1.5px solid var(--rule);border-radius:7px;background:var(--sheet)}
+.t15 .vstat{margin:10px 0 0;font-size:14px;min-height:1.4em}
+.t15 .vstat .no{color:var(--bad)} .t15 .vstat .yes{color:var(--ok);font-weight:600}
+
+.t15 .grid15{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:4px;max-width:720px}
+.t15 .grid15.b8{grid-template-columns:repeat(8,minmax(0,1fr));max-width:560px}
+@media (max-width:560px){.t15 .grid15{grid-template-columns:repeat(8,minmax(0,1fr))}}
+.t15 .gx{font-family:var(--f-mono);font-size:13px;font-weight:600;text-align:center;padding:6px 0;border-radius:6px;border:1px solid var(--rule);background:var(--sheet);font-variant-numeric:tabular-nums;display:flex;flex-direction:column;line-height:1.15}
+.t15 .gx small{font-size:9.5px;font-weight:400;color:var(--ink-soft);letter-spacing:.02em}
+.t15 .gx.mul{border-color:var(--live);border-width:2px}
+.t15 .gx.bad{background:var(--bad-soft);border-color:var(--bad);color:var(--bad)}
+.t15 .plane-w{max-width:460px}
+.t15 .plane-w canvas{display:block;width:100%;height:auto;border:1px solid var(--rule);border-radius:8px}
+.t15 .ans15{gap:10px;align-items:center}
+.t15 .ans15 label{font-weight:600}
+.t15 .ans15 input{width:7em;font-family:var(--f-mono);font-size:17px;padding:7px 10px;border:1.5px solid var(--rule);border-radius:7px;background:var(--sheet)}

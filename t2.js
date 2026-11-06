@@ -345,7 +345,7 @@ function checkQ(){
 
 /* ---------- отрицание ---------- */
 function nextNeg(task){
-  NG=task||negTask();NG.opts=[NG.right,...NG.wrongs].sort(()=>Math.random()-.5);NG.done=false;
+  NG=task||negTask();NG.opts=AL.shuffle([NG.right,...NG.wrongs]);NG.done=false;
   $('#x2NgSt').textContent=NG.stmt;
   $('#x2NgOpts').innerHTML=NG.opts.map((o,i)=>`<button class="btn nopt" data-i="${i}"><span class="k">${i+1}</span>${esc(o)}</button>`).join('');
   hideMsg('#x2NgMsg');

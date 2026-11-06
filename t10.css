@@ -1,0 +1,37 @@
+/* Тренажёр 10 «Полные системы» — на общих токенах al.css */
+.t10 .seg{display:flex;gap:4px;flex-wrap:wrap;background:var(--sheet);border:1px solid var(--rule);border-radius:10px;padding:4px;align-self:flex-start}
+.t10 .seg button{border:0;background:none;border-radius:7px;padding:8px 14px;cursor:pointer;font-weight:500;color:var(--ink-soft);display:inline-flex;gap:8px;align-items:center}
+.t10 .seg button[aria-selected=true]{background:var(--accent);color:var(--sheet)}
+.t10 .seg button[aria-selected=true] .pill{background:var(--sheet);color:var(--accent)}
+.t10 .pill.ok{background:var(--accent-soft);color:var(--accent)}
+.t10.exam .seg{display:none}
+.t10 .t10-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:900px){.t10 .t10-grid{grid-template-columns:minmax(0,1fr)}}
+.t10 aside .body p{margin:0 0 10px;max-width:60ch}
+.t10 .basis,.t10 .goal{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;margin-bottom:10px}
+.t10 .basis b{font-family:var(--f-display);font-weight:500;font-size:19px;color:var(--accent)}
+.t10 .basis .bd{font-size:13px;color:var(--ink-soft)}
+.t10 .goal b{font-family:var(--f-mono);font-size:22px;font-weight:700;color:var(--live)}
+.t10 .exprline input{flex:1;font-family:var(--f-mono);font-size:18px;padding:9px 12px;border-radius:8px;background:var(--sheet);border:1.5px solid var(--rule);min-width:0}
+.t10 .exprline input:focus{border-color:var(--accent);outline:none}
+.t10 .help code{font-family:var(--f-mono);background:var(--lamp-off);border-radius:3px;padding:0 4px}
+.t10 .sys{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-family:var(--f-mono);font-size:26px;margin-bottom:14px}
+.t10 .sys .lbl{font-family:var(--f-body);font-size:11px;margin-right:6px}
+.t10 .fnc{display:inline-flex;flex-direction:column;align-items:center;padding:6px 12px;border-radius:9px;border:1.5px solid var(--accent);background:var(--accent-soft);line-height:1.1}
+.t10 .fnc b{font-size:20px;color:var(--accent)} .t10 .fnc small{font-size:11px;color:var(--ink-soft);letter-spacing:.08em}
+.t10 .cm{color:var(--ink-soft)}
+.t10 .verdict{display:flex;gap:8px;flex-wrap:wrap}
+.t10 .vopt.sel{background:var(--accent);border-color:var(--accent);color:var(--sheet)}
+.t10 .why{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:12px}
+.t10 .why .lbl{flex-basis:100%}
+.t10 .chipb{border:1.5px dashed var(--rule);background:var(--sheet);border-radius:99px;padding:6px 12px;cursor:pointer;font-size:13.5px;color:var(--ink)}
+.t10 .chipb.on{border-style:solid;border-color:var(--live);background:var(--glow);color:#3a2a00}
+.t10 table.post{border-collapse:collapse;margin-top:14px;font-size:13.5px}
+.t10 .post th{font-family:var(--f-mono);font-size:12px;color:var(--ink-soft);padding:5px 9px;border-bottom:2px solid var(--ink)}
+.t10 .post td{padding:5px 9px;border-bottom:1px solid var(--rule);text-align:center}
+.t10 .post td.fn{font-family:var(--f-mono);font-weight:700;text-align:left} .t10 .post td.m{font-family:var(--f-mono);color:var(--ink-soft)}
+.t10 .post td.in{color:var(--ok);font-weight:600} .t10 .post td.out{color:var(--ink-soft)}
+.t10 .post tr.sum td{border-top:2px solid var(--ink);font-weight:600}
+.t10 .post tr.sum td.in{background:var(--ok-soft)}
+.t10 .cls{margin:0;display:flex;flex-direction:column;gap:8px}
+.t10 .cls dt{font-weight:600;font-size:14px} .t10 .cls dd{margin:2px 0 0;font-size:13px;color:var(--ink-soft)}

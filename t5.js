@@ -276,8 +276,8 @@ function nextRc(){
     const to=outs[Math.floor(Math.random()*outs.length)];
     if(show(from).length>38||show(to).length>40)continue;
     const also=LAWS.filter(l=>l.id!==law.id&&succ(l,from).some(x=>key(x)===key(to)));
-    const wrong=LAWS.filter(l=>l.id!==law.id&&!also.includes(l)).sort(()=>Math.random()-.5).slice(0,3);
-    RC={from,to,law,opts:[law,...wrong].sort(()=>Math.random()-.5),done:false};
+    const wrong=AL.shuffle(LAWS.filter(l=>l.id!==law.id&&!also.includes(l))).slice(0,3);
+    RC={from,to,law,opts:AL.shuffle([law,...wrong]),done:false};
     $('#x5RcA').textContent=show(from);$('#x5RcB').textContent=show(to);
     $('#x5RcOpts').innerHTML=RC.opts.map((l,i)=>`<button class="btn ropt" data-id="${l.id}"><span class="k">${i+1}</span><span><b>${esc(l.name)}</b><small>${esc(l.f)}</small></span></button>`).join('');
     hideMsg('#x5RcMsg');return;

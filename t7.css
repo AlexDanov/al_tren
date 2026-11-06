@@ -1,0 +1,41 @@
+/* Тренажёр 7 «Логика и множества» — на общих токенах al.css */
+.t7 .seg{display:flex;gap:4px;flex-wrap:wrap;background:var(--sheet);border:1px solid var(--rule);border-radius:10px;padding:4px;align-self:flex-start}
+.t7 .seg button{border:0;background:none;border-radius:7px;padding:8px 14px;cursor:pointer;font-weight:500;color:var(--ink-soft);display:inline-flex;gap:8px;align-items:center}
+.t7 .seg button[aria-selected=true]{background:var(--accent);color:var(--sheet)}
+.t7 .seg button[aria-selected=true] .pill{background:var(--sheet);color:var(--accent)}
+.t7 .pill.ok{background:var(--accent-soft);color:var(--accent)}
+.t7.exam .seg,.t7.exam .x7-pr,.t7.mode-qu .x7-lv{display:none}
+.t7 .t7-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:900px){.t7 .t7-grid{grid-template-columns:minmax(0,1fr)}}
+
+.t7 .task-e{font-family:var(--f-mono);font-size:clamp(18px,2.6vw,22px);font-weight:600;margin-bottom:10px}
+.t7 .task-e .en{color:var(--live)}
+.t7 .venn-wrap{max-width:460px}
+.t7 svg.venn{display:block;width:100%;height:auto;touch-action:manipulation}
+.t7 svg.venn.click{cursor:pointer}
+.t7 .venn .vu{fill:none;stroke:var(--ink);stroke-width:2}
+.t7 .venn .vc{fill:none;stroke:var(--ink);stroke-width:2.2}
+.t7 .venn .vr{transition:fill .12s}
+.t7 .venn .vr.bad{stroke:var(--bad);stroke-width:5}
+.t7 .venn .vhl rect{fill:var(--accent);fill-opacity:.18;pointer-events:none}
+.t7 .venn .vl{font-family:var(--f-mono);font-weight:700;font-size:18px;fill:var(--accent);text-anchor:middle}
+.t7 .venn .vU{font-family:var(--f-mono);font-size:13px;fill:var(--ink-soft);text-anchor:end}
+.t7 .venn .vn{font-family:var(--f-mono);font-weight:700;font-size:16px;fill:var(--ink);text-anchor:middle}
+.t7 .vhover{font-size:13px;color:var(--ink-soft);margin:6px 0 10px;min-height:1.3em;font-family:var(--f-mono)}
+.t7 #x7WrBox .exprline input{flex:1;font-family:var(--f-mono);font-size:18px;padding:9px 12px;border-radius:8px;background:var(--sheet);border:1.5px solid var(--rule);min-width:0}
+.t7 #x7WrBox .exprline input:focus{border-color:var(--accent);outline:none}
+.t7 .t7tt td.rn{font-size:12.5px;color:var(--ink-soft);padding:0 10px;white-space:nowrap;border-left:1px solid var(--rule)}
+.t7 .t7tt th.f{border-left:2px solid var(--ink)}
+.t7 .t7tt td.fc{border-left:2px solid var(--ink);padding:3px 6px}
+.t7 .t7tt .fbtn.on{background:var(--glow);border-color:var(--live);color:#3a2a00}
+.t7 .t7tt .fbtn:disabled{cursor:default}
+
+.t7 .qtab{border-collapse:collapse;width:100%;max-width:520px;margin-bottom:14px}
+.t7 .qtab th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);padding:6px 10px;border-bottom:2px solid var(--ink)}
+.t7 .qtab td{padding:9px 10px;border-bottom:1px solid var(--rule);font-variant-numeric:tabular-nums}
+.t7 .qtab .qq{font-family:var(--f-mono);font-weight:600}
+.t7 .qtab .qv{font-family:var(--f-mono);text-align:right}
+.t7 .qtab tr.ask td{background:var(--accent-soft)} .t7 .qtab tr.ask .qv{color:var(--accent);font-weight:700}
+.t7 .qans{gap:10px;align-items:center}
+.t7 .qans label{font-weight:600}
+.t7 .qans input{width:8em;font-family:var(--f-mono);font-size:17px;padding:7px 10px;border:1.5px solid var(--rule);border-radius:7px;background:var(--sheet)}

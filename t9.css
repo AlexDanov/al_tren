@@ -1,0 +1,36 @@
+/* Тренажёр 9 «СДНФ и СКНФ» — на общих токенах al.css */
+.t9 .seg{display:flex;gap:4px;flex-wrap:wrap;background:var(--sheet);border:1px solid var(--rule);border-radius:10px;padding:4px;align-self:flex-start}
+.t9 .seg button{border:0;background:none;border-radius:7px;padding:8px 14px;cursor:pointer;font-weight:500;color:var(--ink-soft);display:inline-flex;gap:8px;align-items:center}
+.t9 .seg button[aria-selected=true]{background:var(--accent);color:var(--sheet)}
+.t9 .seg button[aria-selected=true] .pill{background:var(--sheet);color:var(--accent)}
+.t9 .pill.ok{background:var(--accent-soft);color:var(--accent)}
+.t9.exam .seg,.t9.exam .x9-pr{display:none}
+.t9 .t9-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:900px){.t9 .t9-grid{grid-template-columns:minmax(0,1fr)}}
+.t9 .rule .body p{margin:0 0 10px;max-width:60ch}
+.t9 .rule .ex{font-family:var(--f-mono);background:var(--accent-soft);padding:8px 10px;border-radius:8px}
+.t9 .revf{font-family:var(--f-mono);font-size:clamp(15px,2.2vw,19px);font-weight:600;margin-bottom:12px;overflow-wrap:anywhere;line-height:1.5}
+.t9 .revf .en{color:var(--live)}
+.t9 .t9tt td.fv{border-left:2px solid var(--ink);font-weight:700;color:var(--live)}
+.t9 .t9tt th.f{border-left:2px solid var(--ink)}
+.t9 .t9tt td.fc{border-left:2px solid var(--ink);padding:3px 6px}
+.t9 .t9tt th.pk{font-size:11px;font-family:var(--f-body);font-weight:500;color:var(--ink-soft);padding:4px 8px;border-left:1px solid var(--rule)}
+.t9 .t9tt td.pk{border-left:1px solid var(--rule)}
+.t9 .pkb{width:36px;height:28px;border-radius:6px;border:1.5px dashed var(--rule);background:var(--sheet);cursor:pointer;font-weight:700;color:var(--sheet)}
+.t9 .pkb.on{border-style:solid;border-color:var(--live);background:var(--glow);color:#3a2a00}
+.t9 .pkb:disabled{cursor:default}
+.t9 .t9tt tr.sel td{background:color-mix(in srgb,var(--glow) 22%,transparent)}
+.t9 .t9tt tr.bad td{outline:2px solid var(--bad);outline-offset:-2px}
+.t9 .t9tt tr.miss td{box-shadow:inset 0 0 0 2px var(--live)}
+.t9 #x9Card2.locked .wait{color:var(--ink-soft);margin:0}
+.t9 .terms{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.t9 .term{display:flex;flex-direction:column;gap:4px;padding:8px 10px;border:1px solid var(--rule);border-radius:10px;background:var(--sheet)}
+.t9 .trow{font-size:11.5px;color:var(--ink-soft);font-family:var(--f-mono)}
+.t9 .tbody{font-family:var(--f-mono);font-size:19px;font-weight:600;display:flex;align-items:center;gap:3px}
+.t9 .tbody .op{color:var(--ink-soft);margin:0 2px}
+.t9 .join{font-family:var(--f-mono);font-size:22px;font-weight:700;color:var(--live)}
+.t9 .lit{font:inherit;min-width:2.1em;padding:2px 6px;border-radius:7px;border:1.5px solid var(--accent);background:var(--accent-soft);color:var(--accent);cursor:pointer}
+.t9 .lit.unset{border-style:dashed;color:var(--ink-soft);background:transparent;border-color:var(--rule)}
+.t9 .lit.bad{border-color:var(--bad);background:var(--bad-soft);color:var(--bad)}
+.t9 .lit.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok)}
+.t9 .lit:disabled{cursor:default}

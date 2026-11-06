@@ -1,0 +1,50 @@
+/* Тренажёр 13 «Триггер» — на общих токенах al.css */
+.t13 .seg{display:flex;gap:4px;flex-wrap:wrap;background:var(--sheet);border:1px solid var(--rule);border-radius:10px;padding:4px;align-self:flex-start}
+.t13 .seg button{border:0;background:none;border-radius:7px;padding:8px 14px;cursor:pointer;font-weight:500;color:var(--ink-soft);display:inline-flex;gap:8px;align-items:center}
+.t13 .seg button[aria-selected=true]{background:var(--accent);color:var(--sheet)}
+.t13 .seg button[aria-selected=true] .pill{background:var(--sheet);color:var(--accent)}
+.t13 .pill.ok{background:var(--accent-soft);color:var(--accent)}
+.t13.exam .seg{display:none}
+.t13 .t13-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:900px){.t13 .t13-grid{grid-template-columns:minmax(0,1fr)}}
+.t13 aside .body p{margin:0 0 10px;max-width:60ch}
+
+.t13 svg.circ13{display:block;width:100%;min-width:480px;max-width:700px;height:auto}
+.t13 .circ13 .g{fill:var(--sheet);stroke:var(--ink);stroke-width:2.2}
+.t13 .circ13 .gl{font-family:var(--f-mono);font-weight:700;font-size:16px;fill:var(--ink);text-anchor:middle}
+.t13 .circ13 .gn{font-family:var(--f-body);font-size:11px;fill:var(--ink-soft);text-anchor:middle}
+.t13 .circ13 .gi{fill:var(--sheet);stroke:var(--ink);stroke-width:2}
+.t13 .circ13 .w{fill:none;stroke:var(--ink-soft);stroke-width:2.4;stroke-linejoin:round}
+.t13 .circ13 .w.on{stroke:var(--live);stroke-width:3.2;stroke-dasharray:6 5;animation:flow13 .7s linear infinite}
+@keyframes flow13{to{stroke-dashoffset:-11}}
+@media (prefers-reduced-motion:reduce){.t13 .circ13 .w.on{animation:none;stroke-dasharray:none}}
+.t13 .circ13 .jd{fill:var(--ink-soft)} .t13 .circ13 .jd.on{fill:var(--live)}
+.t13 .circ13 .inb{cursor:pointer} .t13 .circ13 .inb:focus{outline:none}
+.t13 .circ13 .inb rect{fill:var(--sheet);stroke:var(--accent);stroke-width:2}
+.t13 .circ13 .inb text{font-family:var(--f-mono);font-weight:700;font-size:13px;fill:var(--accent);text-anchor:middle}
+.t13 .circ13 .inb.on rect{fill:var(--glow);stroke:var(--live)} .t13 .circ13 .inb.on text{fill:#3a2a00}
+.t13 .circ13 .inb:focus-visible rect{stroke-width:3.5}
+.t13 .circ13 .outl circle{fill:var(--ink-soft)} .t13 .circ13 .outl text{font-family:var(--f-mono);font-weight:700;font-size:15px;fill:var(--ink-soft)}
+.t13 .circ13 .outl.on circle{fill:var(--live)} .t13 .circ13 .outl.on text{fill:var(--live)}
+.t13 .state{margin:12px 0 6px;font-size:15px}
+.t13 .qb{font-family:var(--f-mono);font-size:18px;padding:0 8px;border-radius:6px;background:var(--lamp-off)}
+.t13 .qb.on{background:var(--glow);color:#3a2a00}
+.t13 .hist{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.t13 .hist .lbl{margin-right:6px}
+.t13 .hs{display:inline-flex;flex-direction:column;align-items:center;min-width:26px;padding:2px 4px;border-radius:5px;border:1px solid var(--rule);font-family:var(--f-mono);font-size:11px;color:var(--ink-soft);line-height:1.15}
+.t13 .hs b{font-size:14px;color:var(--ink)} .t13 .hs.on{border-color:var(--live)} .t13 .hs.on b{color:var(--live)}
+.t13 .quest{margin:0 0 12px;padding-left:22px;display:flex;flex-direction:column;gap:10px}
+.t13 .quest li b{display:block} .t13 .quest li span{font-size:13.5px;color:var(--ink-soft)}
+.t13 .quest li.done{color:var(--ok)} .t13 .quest li.done b::after{content:" ✓"}
+.t13 .t13tt th.f{border-left:2px solid var(--ink)} .t13 .t13tt td.fc{border-left:2px solid var(--ink);padding:3px 6px}
+.t13 .t13tt th.act,.t13 .t13tt td.act{text-align:left;font-family:var(--f-body);font-size:12.5px;color:var(--ink-soft);padding:0 10px;min-width:190px;border-left:1px solid var(--rule)}
+.t13 table.dia{border-collapse:separate;border-spacing:3px;font-family:var(--f-mono)}
+.t13 .dia th{font-size:13px;color:var(--ink-soft);padding:2px 6px;font-weight:600}
+.t13 .dia .t0{border-right:2px dashed var(--rule);padding-right:6px}
+.t13 .pv{display:block;width:38px;height:30px;line-height:30px;text-align:center;border-radius:5px;background:var(--lamp-off);color:var(--ink-soft);font-weight:600}
+.t13 .pv.hi{background:var(--accent);color:var(--sheet)} .t13 .pv.hi.r{background:var(--inv)}
+.t13 .pv.q{background:var(--lamp-off)} .t13 .pv.q.hi{background:var(--glow);color:#3a2a00}
+.t13 .qc{width:38px;height:34px;border-radius:5px;border:1.5px dashed var(--rule);background:var(--sheet);cursor:pointer;font-family:var(--f-mono);font-size:15px;font-weight:700;color:var(--ink-soft)}
+.t13 .qc.hi{background:var(--glow);border-style:solid;border-color:var(--live);color:#3a2a00}
+.t13 .qc.bad{outline:2.5px solid var(--bad);outline-offset:1px} .t13 .qc.ok{border-color:var(--ok)}
+.t13 .qc:disabled{cursor:default}
