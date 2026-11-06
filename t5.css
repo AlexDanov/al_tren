@@ -1,0 +1,41 @@
+/* Тренажёр 5 «Законы алгебры логики» — на общих токенах al.css */
+.t5 .seg{display:flex;gap:4px;flex-wrap:wrap;background:var(--sheet);border:1px solid var(--rule);border-radius:10px;padding:4px;align-self:flex-start}
+.t5 .seg button{border:0;background:none;border-radius:7px;padding:8px 14px;cursor:pointer;font-weight:500;color:var(--ink-soft);display:inline-flex;gap:8px;align-items:center}
+.t5 .seg button[aria-selected=true]{background:var(--accent);color:var(--sheet)}
+.t5 .seg button[aria-selected=true] .pill{background:var(--sheet);color:var(--accent)}
+.t5 .pill.ok{background:var(--accent-soft);color:var(--accent)}
+.t5.exam .seg,.t5.exam .x5-sp,.t5.mode-rc .x5-sp{display:none}
+
+.t5 .t5-wrap{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:960px){.t5 .t5-wrap{grid-template-columns:minmax(0,1fr)}}
+.t5 .t5-main{display:flex;flex-direction:column;gap:16px;min-width:0}
+.t5 .rc-step{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:10px;align-items:center;margin-bottom:16px}
+@media (max-width:620px){.t5 .rc-step{grid-template-columns:minmax(0,1fr)}.t5 .rc-arr{justify-self:start}}
+.t5 .rc-e{font-family:var(--f-mono);font-size:clamp(16px,2.4vw,20px);font-weight:600;padding:14px 16px;border-radius:10px;background:var(--accent-soft);border:1px solid var(--rule);overflow-wrap:anywhere}
+.t5 .rc-arr{font-family:var(--f-mono);font-size:24px;font-weight:700;color:var(--live)}
+.t5 .rc-opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media (max-width:620px){.t5 .rc-opts{grid-template-columns:minmax(0,1fr)}}
+.t5 .ropt{justify-content:flex-start;align-items:flex-start;text-align:left;white-space:normal;padding:10px 12px;gap:10px}
+.t5 .ropt span:last-child{display:flex;flex-direction:column;gap:2px}
+.t5 .ropt small{font-family:var(--f-mono);font-size:12px;color:var(--ink-soft)}
+.t5 .ropt .k{font-family:var(--f-mono);font-size:12px;border:1px solid var(--rule);border-bottom-width:2px;border-radius:4px;padding:0 5px;color:var(--ink-soft)}
+.t5 .ropt.ok{border-color:var(--ok);background:var(--ok-soft);opacity:1}
+.t5 .ropt.bad{border-color:var(--bad);background:var(--bad-soft);opacity:1}
+
+.t5 .chain{list-style:none;margin:0 0 14px;padding:0;display:flex;flex-direction:column;gap:6px;counter-reset:st}
+.t5 .chain li{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:4px 14px;align-items:baseline;padding:8px 12px;border-radius:8px;border:1px solid var(--rule);background:var(--sheet)}
+.t5 .chain li.first{background:var(--accent-soft)}
+.t5 .chain li:last-child:not(.first){border-color:var(--live)}
+@media (max-width:620px){.t5 .chain li{grid-template-columns:minmax(0,1fr) auto}.t5 .chain .cl{grid-column:1/-1;grid-row:2}}
+.t5 .chain .ce{font-family:var(--f-mono);font-size:17px;font-weight:600;overflow-wrap:anywhere}
+.t5 .chain .cl{font-size:12.5px;color:var(--accent);font-weight:600}
+.t5 .chain .cl.muted{color:var(--ink-soft);font-weight:400}
+.t5 .chain .cs{font-size:12px;color:var(--ink-soft);font-variant-numeric:tabular-nums;white-space:nowrap}
+.t5 .next-step .exprline input{flex:1;font-family:var(--f-mono);font-size:18px;padding:9px 12px;border-radius:8px;background:var(--sheet);border:1.5px solid var(--rule);min-width:0}
+.t5 .next-step .exprline input:focus{border-color:var(--accent);outline:none}
+.t5 .lawpick{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;margin-top:12px}
+.t5 .lawpick select{min-width:min(320px,100%)}
+.t5 .lawlist{margin:0;display:flex;flex-direction:column;gap:9px}
+.t5 .lawlist div{border-bottom:1px solid var(--rule);padding-bottom:8px}
+.t5 .lawlist dt{font-weight:600;font-size:14px}
+.t5 .lawlist dd{margin:2px 0 0;font-family:var(--f-mono);font-size:12.5px;color:var(--ink-soft);overflow-wrap:anywhere}
