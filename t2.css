@@ -1,0 +1,45 @@
+/* Тренажёр 2 «Предикаты и кванторы» — на общих токенах al.css */
+.t2 .seg{display:flex;gap:4px;flex-wrap:wrap;background:var(--sheet);border:1px solid var(--rule);border-radius:10px;padding:4px;align-self:flex-start}
+.t2 .seg button{border:0;background:none;border-radius:7px;padding:8px 14px;cursor:pointer;font-weight:500;color:var(--ink-soft);display:inline-flex;gap:8px;align-items:center}
+.t2 .seg button[aria-selected=true]{background:var(--accent);color:var(--sheet)}
+.t2 .seg button[aria-selected=true] .pill{background:var(--sheet);color:var(--accent)}
+.t2 .pill.ok{background:var(--accent-soft);color:var(--accent)}
+.t2.exam .seg,.t2.exam .x2-pr,.t2.mode-ng .x2-pr{display:none}
+.t2 .t2-col{display:flex;flex-direction:column;gap:16px}
+
+.t2 .pdef{font-family:var(--f-mono);font-size:clamp(17px,2.4vw,21px);font-weight:600;display:flex;flex-wrap:wrap;gap:4px 18px;align-items:baseline;margin-bottom:14px;overflow-wrap:anywhere}
+.t2 .pdef .pn{color:var(--accent)}
+.t2 .pdef .dom{font-size:14px;font-weight:400;color:var(--ink-soft)}
+.t2 .tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(48px,1fr));gap:8px;max-width:720px}
+.t2 .tile{font-family:var(--f-mono);font-size:18px;font-weight:600;height:48px;border-radius:8px;border:1.5px solid var(--rule);background:var(--sheet);color:var(--ink);cursor:pointer;
+  font-variant-numeric:tabular-nums;transition:background .12s,transform .12s}
+.t2 .tile:hover:not(:disabled){border-color:var(--accent);transform:translateY(-1px)}
+.t2 .tile.on{background:var(--glow);border-color:var(--live);color:#3a2a00;box-shadow:0 0 8px color-mix(in srgb,var(--glow) 60%,transparent)}
+.t2 .tile.bad,.t2 .cell.bad{outline:2.5px solid var(--bad);outline-offset:1px}
+.t2 .tile:disabled,.t2 .cell:disabled{cursor:default}
+.t2 table.grid2{border-collapse:separate;border-spacing:5px;font-family:var(--f-mono)}
+.t2 .grid2 th{font-size:15px;color:var(--ink-soft);font-weight:600;min-width:34px}
+.t2 .grid2 th.corner{font-size:11px;font-family:var(--f-body)}
+.t2 .cell{width:48px;height:44px;border-radius:7px;border:1.5px solid var(--rule);background:var(--sheet);cursor:pointer;font-family:var(--f-mono);font-weight:600;font-size:15px;color:#3a2a00}
+.t2 .cell:hover:not(:disabled){border-color:var(--accent)}
+.t2 .cell.on{background:var(--glow);border-color:var(--live)}
+
+.t2 #x2QCard.locked .wait{color:var(--ink-soft);margin:0}
+.t2 .qs{display:flex;flex-direction:column;gap:10px}
+.t2 .qrow{display:grid;grid-template-columns:minmax(150px,auto) auto 1fr;gap:6px 16px;align-items:center;padding:8px 10px;border-radius:8px;border:1px solid transparent}
+@media (max-width:640px){.t2 .qrow{grid-template-columns:minmax(0,1fr)}}
+.t2 .qf{font-family:var(--f-mono);font-size:19px;font-weight:600}
+.t2 .qb{display:flex;gap:6px}
+.t2 .tf.sel{background:var(--accent);border-color:var(--accent);color:var(--sheet)}
+.t2 .qwhy{font-size:13.5px;color:var(--ink-soft)}
+.t2 .qrow.ok{border-color:var(--ok);background:var(--ok-soft)} .t2 .qrow.ok .qwhy{color:var(--ok)}
+.t2 .qrow.bad{border-color:var(--bad);background:var(--bad-soft)} .t2 .qrow.bad .qwhy{color:var(--bad)}
+
+.t2 .neg-st{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.t2 .neg-q{font-family:var(--f-mono);font-size:clamp(20px,3vw,26px);font-weight:600;padding:14px 18px;border-left:4px solid var(--accent);background:var(--accent-soft);border-radius:0 10px 10px 0;overflow-wrap:anywhere}
+.t2 .neg-opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media (max-width:640px){.t2 .neg-opts{grid-template-columns:minmax(0,1fr)}}
+.t2 .nopt{justify-content:flex-start;font-family:var(--f-mono);font-size:16px;padding:11px 12px;white-space:normal;text-align:left}
+.t2 .nopt .k{font-size:12px;border:1px solid var(--rule);border-bottom-width:2px;border-radius:4px;padding:0 5px;color:var(--ink-soft);font-family:var(--f-mono)}
+.t2 .nopt.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok);opacity:1}
+.t2 .nopt.bad{border-color:var(--bad);background:var(--bad-soft);color:var(--bad);opacity:1}

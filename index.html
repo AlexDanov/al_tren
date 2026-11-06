@@ -1,718 +1,531 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
-<title>Тренажёр логических схем</title>
+<title>Карта алгебры логики</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;600&family=Unbounded:wght@500;700&display=swap">
+<link rel="stylesheet" href="al.css">
+<link rel="stylesheet" href="t1.css">
+<link rel="stylesheet" href="t2.css">
+<link rel="stylesheet" href="t3.css">
 <style>
-/* Layout: «тетрадь в клетку» — листы-карточки на клетчатом столе; слева схема и выражение, справа таблица истинности */
+/* Layout: та же «тетрадь в клетку», что у тренажёров. Карта — монтажная плата:
+   темы — лампы на карточках, связи — провода; ток (жёлтый) идёт дальше от освоенной темы.
+   Сверху «Основы», от темы 3 шина расходится по пяти веткам. На телефоне ветки идут друг под другом. */
+:root{ --gap:16px; --wire:var(--rule); --wire-live:var(--live); --node-w:100%; }
+
+.hub{max-width:1260px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+.h-top{display:flex;flex-wrap:wrap;gap:14px 24px;align-items:flex-end;justify-content:space-between}
+.h-brand{display:flex;gap:12px;align-items:center;min-width:0}
+.h-brand h1{font-family:var(--f-display);font-weight:700;font-size:clamp(20px,3vw,28px);margin:0;letter-spacing:-.01em;text-wrap:balance}
+.h-brand p{margin:2px 0 0;color:var(--ink-soft);font-size:13px}
+#hStudent{width:13em}
+
+/* сводка */
+.h-summary{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:var(--gap)}
+@media (max-width:760px){.h-summary{grid-template-columns:minmax(0,1fr)}}
+.sum-card{background:var(--sheet);border:1px solid var(--rule);border-radius:10px;padding:14px 18px;min-width:0;display:flex;flex-direction:column;gap:10px}
+.sum-card .lbl{display:block}
+.sum-big{font-family:var(--f-display);font-weight:500;font-size:20px;font-variant-numeric:tabular-nums}
+.sum-big small{font-family:var(--f-body);font-size:13px;color:var(--ink-soft);font-weight:400;margin-left:6px}
+.bulbs{display:flex;flex-wrap:wrap;gap:6px}
+.bulbs i{width:16px;height:16px;border-radius:50%;background:var(--lamp-off);border:1.5px solid var(--rule)}
+.bulbs i.on{background:var(--glow);border-color:var(--live);box-shadow:0 0 6px var(--glow)}
+.bulbs i.soon{border-style:dashed}
+.next{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.next .nx-t{flex:1;min-width:12em}
+.next .nx-t b{font-family:var(--f-display);font-weight:500;font-size:17px;display:block}
+.next .nx-t span{color:var(--ink-soft);font-size:13px}
+
+/* карта: ночное дерево навыков. Панель намеренно тёмная в обеих темах, чтобы свечение читалось. */
 :root{
-  --paper:#f3f6f9; --grid:#e1e8f0; --sheet:#ffffff; --sheet-grid:#eef2f7;
-  --ink:#1c2e4a; --ink-soft:#5b6b84; --rule:#ccd6e3;
-  --accent:#2557c9; --accent-soft:#e6edfb;
-  --inv:#a8326a; --inv-soft:#f8e8ef;
-  --live:#d98a00; --glow:#ffd256; --lamp-off:#f1f3f6;
-  --ok:#1d8048; --ok-soft:#e2f3e8; --bad:#c43131; --bad-soft:#fbe6e4;
-  --margin:#e7a0a0;
-  --f-display:"Unbounded","Golos Text",system-ui,sans-serif;
-  --f-body:"Golos Text",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --f-mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  --m-bg:#0b1222; --m-bg2:#15213b; --m-dot:#1f2d4b; --m-ink:#e8eefb; --m-soft:#8796b6; --m-dim:#4a587a;
+  --m-disc:#111a2f; --m-gold:#ffc94a; --m-glow:#ffd970; --m-accent:#8fb0ff;
+  --h-base:#a9bcff; --h-trans:#b99cff; --h-sets:#57d6c4; --h-func:#6cb6ff; --h-circ:#ff9d5c; --h-ege:#ff7fb6;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --paper:#0e141c; --grid:#18212d; --sheet:#141c27; --sheet-grid:#1a2431;
-  --ink:#e2e9f3; --ink-soft:#91a1b7; --rule:#2a3646;
-  --accent:#7ea4ff; --accent-soft:#1c2a47;
-  --inv:#f083b5; --inv-soft:#3a1f2d;
-  --live:#ffb22e; --glow:#ffd256; --lamp-off:#1d2633;
-  --ok:#4fc483; --ok-soft:#163323; --bad:#ff6c64; --bad-soft:#3d1b1b;
-  --margin:#5e3540; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --paper:#0e141c; --grid:#18212d; --sheet:#141c27; --sheet-grid:#1a2431;
-  --ink:#e2e9f3; --ink-soft:#91a1b7; --rule:#2a3646;
-  --accent:#7ea4ff; --accent-soft:#1c2a47;
-  --inv:#f083b5; --inv-soft:#3a1f2d;
-  --live:#ffb22e; --glow:#ffd256; --lamp-off:#1d2633;
-  --ok:#4fc483; --ok-soft:#163323; --bad:#ff6c64; --bad-soft:#3d1b1b;
-  --margin:#5e3540; color-scheme:dark}
+.h-map{position:relative;border-radius:16px;overflow:hidden;color:var(--m-ink);
+  background:radial-gradient(120% 90% at 50% 0%,var(--m-bg2) 0%,var(--m-bg) 62%);border:1px solid var(--m-bg2);
+  box-shadow:inset 0 0 80px rgba(0,0,0,.45)}
+.map-h{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;padding:16px 20px 0}
+.map-h h2{font-family:var(--f-display);font-weight:500;font-size:17px;margin:0;color:var(--m-ink);letter-spacing:.01em}
+.map-h p{margin:0;color:var(--m-soft);font-size:13px}
+.map-scroll{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-color:var(--m-dim) transparent}
+.map-scroll svg{display:block;width:100%;min-width:760px;height:auto;margin:0 auto;max-width:1100px}
+.pan-hint{display:none;padding:0 20px;font-size:12px;color:var(--m-soft)}
+@media (max-width:800px){.pan-hint{display:block}}
 
-*{box-sizing:border-box}
-body{background-color:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.45;
-  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
-  background-size:20px 20px;
-  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 40px}
-.app{max-width:1260px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
-button,input,select{font:inherit;color:inherit}
-:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+/* связи */
+.edge{fill:none;stroke-width:2.6;stroke-linecap:round;opacity:.28;transition:opacity .2s,stroke-width .2s}
+.edge.avail{opacity:.75}
+.edge.live{stroke:var(--m-gold);opacity:1;filter:url(#fGlowSoft)}
+.flow{fill:none;stroke:var(--m-glow);stroke-width:2.2;stroke-linecap:round;stroke-dasharray:2 14;animation:mflow 1.1s linear infinite;pointer-events:none}
+@keyframes mflow{to{stroke-dashoffset:-16}}
 
-/* header */
-.top{display:flex;flex-wrap:wrap;gap:14px 24px;align-items:flex-end;justify-content:space-between}
-.brand{display:flex;gap:12px;align-items:center}
-.brand h1{font-family:var(--f-display);font-weight:700;font-size:clamp(18px,2.4vw,24px);margin:0;letter-spacing:-.01em;text-wrap:balance}
-.brand p{margin:2px 0 0;color:var(--ink-soft);font-size:13px}
-.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}
-.field{display:flex;flex-direction:column;gap:3px}
-.field>label,.lbl{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);font-weight:600}
-.row{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
-input[type=text],select{background:var(--sheet);border:1px solid var(--rule);border-radius:6px;padding:7px 10px;min-width:0}
-#seed{font-family:var(--f-mono);width:9.5em;text-transform:uppercase;letter-spacing:.04em}
-#student{width:12em}
-.btn{background:var(--sheet);border:1px solid var(--rule);border-radius:6px;padding:7px 12px;cursor:pointer;white-space:nowrap;display:inline-flex;gap:6px;align-items:center}
-.btn:hover{border-color:var(--accent)}
-.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--sheet);font-weight:600}
-.btn.primary:hover{filter:brightness(1.08)}
-.btn.ghost{background:transparent}
-.btn.danger{color:var(--bad);border-color:var(--bad)}
-.btn:disabled{opacity:.45;cursor:not-allowed}
-.pill{font-family:var(--f-mono);font-size:12px;background:var(--bad-soft);color:var(--bad);border-radius:99px;padding:0 7px;min-width:1.6em;text-align:center;font-variant-numeric:tabular-nums}
+/* узлы */
+.mnode{cursor:pointer;outline:none}
+.mnode .hit{fill:transparent}
+.mnode .halo{opacity:0;transition:opacity .25s}
+.mnode .disc{fill:var(--m-disc);stroke-width:2.4;transition:stroke-width .2s}
+.mnode .ring2{fill:none;stroke-width:1;opacity:.45}
+.mnode .arc{fill:none;stroke:var(--m-gold);stroke-width:4;stroke-linecap:round;filter:url(#fGlowSoft)}
+.mnode .ico{color:var(--m-ink);transition:color .2s}
+.mnode .ico *{vector-effect:non-scaling-stroke}
+.mnode .lbl{font-family:var(--f-body);font-size:13px;font-weight:500;fill:var(--m-soft);text-anchor:middle;transition:fill .2s}
+.mnode .lbl .n{font-family:var(--f-mono);font-weight:600;fill:var(--m-dim)}
+.mnode .badge{pointer-events:none}
+.mnode.soon .disc{stroke-dasharray:4 5}
+.mnode.soon .ico{color:var(--m-soft)}
+.mnode.s-locked .disc{stroke:var(--m-dim)!important}
+.mnode.s-locked .ico{color:var(--m-dim)}
+.mnode.s-locked .lbl{fill:var(--m-dim)}
+.mnode.built .lbl{fill:var(--m-ink)}
+.mnode.built .lbl .n{fill:var(--m-accent)}
+.mnode.built.s-open .halo,.mnode.built.s-progress .halo{opacity:.55;animation:pulse 2.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.25}50%{opacity:.7}}
+.mnode.s-mastered .disc{stroke:var(--m-gold)!important;fill:#2a2110}
+.mnode.s-mastered .ico{color:var(--m-glow)}
+.mnode.s-mastered .halo{opacity:.9;animation:none}
+.mnode.s-mastered .lbl{fill:var(--m-glow)}
+.mnode.s-mastered .lbl .n{fill:var(--m-gold)}
 
-/* status strip */
-.status{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:13px}
-.chip{display:inline-flex;gap:6px;align-items:center;border:1px solid var(--rule);background:var(--sheet);border-radius:99px;padding:3px 10px;font-variant-numeric:tabular-nums}
-.chip b{font-weight:600}
-.chip .dot{width:8px;height:8px;border-radius:50%;background:var(--rule)}
-.chip.ok{border-color:var(--ok);background:var(--ok-soft)} .chip.ok .dot{background:var(--ok)}
-.chip.bad{border-color:var(--bad);background:var(--bad-soft)} .chip.bad .dot{background:var(--bad)}
-.status .spacer{flex:1}
+/* наведение: подсветка цепочки и названия */
+.skill-svg.focus .edge:not(.hl){opacity:.1}
+.skill-svg.focus .mnode:not(.hl){opacity:.38}
+.skill-svg .edge.hl{opacity:1;stroke-width:3.4;filter:url(#fGlowSoft)}
+.mnode.hl .lbl{fill:#fff;filter:url(#fGlowText)}
+.mnode.hl .lbl .n{fill:var(--m-glow)}
+.mnode.cur .disc{stroke-width:3.4}
+.mnode:focus-visible .disc{stroke:#fff!important;stroke-width:3.4}
+.mnode .scale{transition:transform .2s;transform-box:fill-box;transform-origin:center}
+.mnode.cur .scale{transform:scale(1.12)}
+.here{animation:bob 1.6s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-5px)}}
+.cap{font-family:var(--f-display);font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:500;opacity:.55;text-anchor:middle}
+@media (prefers-reduced-motion:reduce){.flow,.here,.mnode .halo{animation:none!important}}
 
-/* grid */
-.grid{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);grid-template-areas:"circ table" "expr table";gap:16px;align-items:start}
-@media (max-width:900px){.grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"circ" "table" "expr"}}
-.card{background:var(--sheet);border:1px solid var(--rule);border-radius:10px;padding:16px 18px 18px;min-width:0;position:relative}
-.card::before{content:"";position:absolute;top:0;bottom:0;left:44px;width:1px;background:var(--margin);opacity:.7;pointer-events:none}
-.circ{grid-area:circ}.tablecard{grid-area:table}.expr{grid-area:expr}
-.card-h{display:grid;grid-template-columns:28px 1fr;gap:2px 16px;align-items:baseline;margin-bottom:12px}
-.step{font-family:var(--f-display);font-weight:700;font-size:20px;color:var(--accent);text-align:center}
-.card-h h2{font-family:var(--f-display);font-weight:500;font-size:16px;margin:0;letter-spacing:.005em}
-.card-h p{grid-column:2;margin:0;color:var(--ink-soft);font-size:13px;max-width:62ch}
-.body{padding-left:44px}
-@media (max-width:520px){.card::before{display:none}.body{padding-left:0}}
+/* подсказка над узлом */
+.m-tip{position:absolute;z-index:3;pointer-events:none;transform:translate(-50%,calc(-100% - 14px));background:rgba(12,19,36,.92);
+  border:1px solid var(--m-dim);border-radius:10px;padding:8px 12px;min-width:170px;max-width:260px;backdrop-filter:blur(6px);
+  box-shadow:0 8px 28px rgba(0,0,0,.45),0 0 18px color-mix(in srgb,var(--tipc,var(--m-accent)) 35%,transparent)}
+.m-tip b{display:block;font-family:var(--f-display);font-weight:500;font-size:14px;color:#fff}
+.m-tip span{display:block;font-size:12.5px;color:var(--m-soft);margin-top:2px}
+.m-tip i{display:block;font-style:normal;font-size:11.5px;color:var(--tipc,var(--m-accent));margin-top:4px}
 
-/* board */
-.board{border:1px solid var(--rule);border-radius:8px;overflow-x:auto;
-  background-color:var(--sheet);background-image:linear-gradient(var(--sheet-grid) 1px,transparent 1px),linear-gradient(90deg,var(--sheet-grid) 1px,transparent 1px);background-size:10px 10px}
-#circuit{display:block;width:100%;min-width:320px;height:auto;max-height:520px}
-#circuit .w{stroke:var(--ink);stroke-width:2.4;stroke-linecap:round;fill:none}
-#circuit .w.live{stroke:var(--live);stroke-width:3}
-#circuit .flow{stroke:var(--glow);stroke-width:1.6;stroke-dasharray:3 11;fill:none;animation:flow .8s linear infinite;stroke-linecap:round}
-@keyframes flow{from{stroke-dashoffset:14}to{stroke-dashoffset:0}}
-@media (prefers-reduced-motion:reduce){#circuit .flow{animation:none}}
-#circuit .jn{fill:var(--ink)} #circuit .jn.live{fill:var(--live)}
-.kbox{cursor:pointer;stroke-width:1.4;transition:fill .15s}
-.kbox.dir{fill:var(--accent-soft);stroke:var(--accent)}
-.kbox.inv{fill:var(--inv-soft);stroke:var(--inv);stroke-dasharray:5 3}
-.kbox:hover{stroke-width:2.4}
-.kbox:focus{outline:none}.kbox:focus-visible{stroke-width:3}
-.klabel{font-family:var(--f-mono);font-weight:600;font-size:17px;text-anchor:middle;pointer-events:none}
-.klabel.dir{fill:var(--accent)} .klabel.inv{fill:var(--inv)}
-.kover{stroke-width:2;pointer-events:none} .kover{stroke:var(--inv)}
-.kval{font-family:var(--f-mono);font-size:10px;fill:var(--ink-soft);text-anchor:end;pointer-events:none}
-.contact{fill:var(--sheet);stroke:var(--ink);stroke-width:2;pointer-events:none}
-.lever{stroke:var(--ink);stroke-width:3;stroke-linecap:round;pointer-events:none;transition:all .15s}
-.lever.live{stroke:var(--live)}
-.cap{font-family:var(--f-body);font-size:11px;fill:var(--ink-soft);text-anchor:middle}
-.term{font-family:var(--f-mono);font-size:13px;fill:var(--ink);text-anchor:middle;font-weight:600}
-.bulb{stroke:var(--ink);stroke-width:2.4;fill:var(--lamp-off)}
-.bulb.on{fill:var(--glow);stroke:var(--live)}
-.halo{fill:url(#halo);opacity:0;transition:opacity .2s}.halo.on{opacity:1}
-.halo-stop{stop-color:var(--glow)}
+.m-legend{display:flex;flex-wrap:wrap;gap:8px 20px;padding:4px 20px 16px;font-size:12.5px;color:var(--m-soft)}
+.m-legend span{display:inline-flex;gap:8px;align-items:center}
+.m-legend svg{flex:none}
+.m-branches{display:flex;flex-wrap:wrap;gap:6px 14px;padding:0 20px 14px;font-size:12px;color:var(--m-soft)}
+.m-branches span{display:inline-flex;gap:6px;align-items:center}
+.m-branches i{width:10px;height:10px;border-radius:50%}
 
-.panel{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px}
-.vbtn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--rule);background:var(--sheet);border-radius:8px;padding:6px 8px 6px 12px;cursor:pointer;font-family:var(--f-mono);font-size:16px;font-weight:600}
-.vbtn .v{font-variant-numeric:tabular-nums;min-width:1.6em;text-align:center;border-radius:5px;padding:1px 4px;background:var(--lamp-off);color:var(--ink-soft)}
-.vbtn[aria-pressed=true] .v{background:var(--accent);color:var(--sheet)}
-.vbtn:hover{border-color:var(--accent)}
-.lampstate{margin-left:auto;font-size:14px;display:flex;gap:8px;align-items:center}
-.lampstate .v{font-family:var(--f-mono);font-weight:600;border-radius:5px;padding:1px 8px;background:var(--lamp-off)}
-.lampstate.on .v{background:var(--glow);color:#3a2a00}
-.legend{display:flex;flex-wrap:wrap;gap:6px 22px;margin-top:12px;font-size:13px;color:var(--ink-soft)}
-.legend span{display:inline-flex;gap:8px;align-items:center}
-.legend svg{flex:none}
-.kbd{font-family:var(--f-mono);font-size:12px;border:1px solid var(--rule);border-bottom-width:2px;border-radius:4px;padding:0 5px}
+.h-foot{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;justify-content:space-between;font-size:13px;color:var(--ink-soft);border-top:1px solid var(--rule);padding-top:12px}
+.h-foot p{margin:0;max-width:70ch}
 
-/* truth table */
-.tt-wrap{overflow-x:auto}
-table.tt{border-collapse:collapse;font-family:var(--f-mono);font-variant-numeric:tabular-nums;margin:0 auto}
-.tt th{font-weight:600;font-size:15px;padding:6px 0;border-bottom:2px solid var(--ink);min-width:44px}
-.tt th.f{border-left:2px solid var(--ink);color:var(--live)}
-.tt td{text-align:center;padding:0;border-bottom:1px solid var(--rule);height:34px;font-size:15px}
-.tt td.n{color:var(--ink-soft);font-size:11px;min-width:30px;padding-right:6px;text-align:right}
-.tt tr.now td{background:var(--accent-soft)}
-.tt tr.now td.n::before{content:"▸ ";color:var(--accent)}
-.tt td.set{cursor:pointer}
-.tt td.set:hover{text-decoration:underline}
-.tt td.fc{border-left:2px solid var(--ink);padding:3px 6px}
-.fbtn{width:44px;height:28px;border:1px dashed var(--rule);border-radius:5px;background:transparent;cursor:pointer;font-family:var(--f-mono);font-size:16px;font-weight:600}
-.fbtn.filled{border-style:solid;border-color:var(--ink-soft)}
-.fbtn.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok)}
-.fbtn.bad{border-color:var(--bad);background:var(--bad-soft);color:var(--bad)}
-.actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:14px}
-.tries{font-size:13px;color:var(--ink-soft);margin-left:auto;font-variant-numeric:tabular-nums}
-.msg{margin-top:10px;font-size:14px;border-radius:6px;padding:8px 12px;display:none}
-.msg.show{display:block}
-.msg.ok{background:var(--ok-soft);color:var(--ok);border:1px solid var(--ok)}
-.msg.bad{background:var(--bad-soft);color:var(--bad);border:1px solid var(--bad)}
-.msg.info{background:var(--accent-soft);color:var(--ink);border:1px solid var(--rule)}
-.msg b{font-family:var(--f-display);font-weight:700;letter-spacing:.02em}
+/* диалоги хаба */
+.modal.narrow{width:min(640px,100%)}
+.d-sec{display:flex;flex-direction:column;gap:6px}
+.d-sec h3{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);font-weight:600}
+.d-sec p{margin:0;max-width:65ch}
+.d-head{display:flex;gap:12px;align-items:center}
+.d-head .lamp-l{width:34px;height:34px;border-radius:50%;flex:none;border:2px solid var(--rule);background:var(--lamp-off)}
+.d-head .lamp-l.s-mastered{background:var(--glow);border-color:var(--live);box-shadow:0 0 12px var(--glow)}
+.d-head .lamp-l.s-open{border-color:var(--accent);background:var(--accent-soft)}
+.d-head .lamp-l.s-progress{border-color:var(--live);background:conic-gradient(var(--live) calc(var(--p,0)*360deg),var(--lamp-off) 0)}
+.d-head h2{font-family:var(--f-display);font-weight:500;font-size:19px;margin:0;flex:1;text-wrap:balance}
+.d-head h2 .num{font-family:var(--f-mono);color:var(--accent);margin-right:8px}
+.meter{height:8px;border-radius:99px;background:var(--lamp-off);overflow:hidden;border:1px solid var(--rule)}
+.meter i{display:block;height:100%;background:var(--live)}
+.reqs{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;list-style:none}
+.reqs li{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.reqs .dotl{width:10px;height:10px;border-radius:50%;background:var(--lamp-off);border:1.5px solid var(--rule)}
+.reqs .dotl.ok{background:var(--glow);border-color:var(--live)}
+.linkish{background:none;border:0;padding:0;color:var(--accent);text-decoration:underline;cursor:pointer;font:inherit}
+.code-box{font-family:var(--f-mono);font-size:13px;width:100%;min-height:84px;background:var(--sheet);color:var(--ink);border:1px solid var(--rule);border-radius:8px;padding:8px 10px;overflow-wrap:anywhere;resize:vertical}
+.code-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.code-row input{font-family:var(--f-mono);text-transform:uppercase;letter-spacing:.06em;width:9em}
+.t-code{font-family:var(--f-mono);font-weight:600;font-size:30px;letter-spacing:.08em;color:var(--accent);font-variant-numeric:tabular-nums}
+.t-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:4px 16px}
+.t-list label{display:flex;gap:8px;align-items:center;font-size:14px}
+.t-list .num{font-family:var(--f-mono);color:var(--accent);min-width:2.6em}
+.switch{display:flex;gap:8px;align-items:center}
 
-/* expression */
-.exprline{display:flex;gap:8px;align-items:stretch}
-.exprline .pre{font-family:var(--f-mono);font-size:20px;font-weight:600;color:var(--live);align-self:center}
-#expr{flex:1;font-family:var(--f-mono);font-size:18px;padding:9px 12px;border-radius:8px;background:var(--sheet);border:1.5px solid var(--rule);min-width:0}
-#expr:focus{border-color:var(--accent);outline:none}
-.preview{font-family:var(--f-mono);font-size:14px;min-height:1.5em;margin:8px 0 0;color:var(--ink-soft);overflow-wrap:anywhere}
-.preview.err{color:var(--bad)}
-.pad{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-.pad button{font-family:var(--f-mono);font-size:16px;font-weight:600;min-width:42px;height:38px;border:1px solid var(--rule);border-radius:6px;background:var(--sheet);cursor:pointer}
-.pad button.op{color:var(--accent)}
-.pad button:hover{border-color:var(--accent)}
-.help{margin-top:10px;font-size:12.5px;color:var(--ink-soft)}
-.help code{font-family:var(--f-mono);background:var(--lamp-off);border-radius:3px;padding:0 4px;color:var(--ink)}
-.answer{font-family:var(--f-mono);font-size:16px;margin-top:10px}
-
-/* modal */
-.overlay{position:fixed;inset:0;background:color-mix(in srgb,var(--ink) 40%,transparent);display:flex;align-items:flex-start;justify-content:center;z-index:50;
-  padding:max(24px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) 24px max(12px,env(safe-area-inset-left,0px));overflow-y:auto}
-.modal{background:var(--sheet);border:1px solid var(--rule);border-radius:12px;width:min(980px,100%);padding:18px;display:flex;flex-direction:column;gap:12px}
-.modal-h{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.modal-h h2{font-family:var(--f-display);font-weight:500;font-size:18px;margin:0;flex:1}
-.tabs{display:flex;gap:4px;border-bottom:1px solid var(--rule)}
-.tabs button{border:0;background:none;padding:8px 12px;cursor:pointer;border-bottom:2px solid transparent;color:var(--ink-soft);font-weight:500}
-.tabs button[aria-selected=true]{border-color:var(--accent);color:var(--ink)}
-.logwrap{overflow-x:auto;max-height:60vh;overflow-y:auto;border:1px solid var(--rule);border-radius:8px}
-table.log{border-collapse:collapse;width:100%;font-size:13px}
-.log th{position:sticky;top:0;background:var(--sheet);text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-soft);padding:8px 10px;border-bottom:1px solid var(--rule);white-space:nowrap}
-.log td{padding:7px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
-.log td.m{font-family:var(--f-mono);white-space:nowrap;font-variant-numeric:tabular-nums}
-.log td.code{font-family:var(--f-mono);overflow-wrap:anywhere;min-width:10em}
-.log .tag{font-size:11px;border-radius:4px;padding:1px 6px;white-space:nowrap}
-.tag.t{background:var(--accent-soft);color:var(--accent)} .tag.e{background:var(--inv-soft);color:var(--inv)} .tag.a{background:var(--bad-soft);color:var(--bad)}
-.tag.ok{background:var(--ok-soft);color:var(--ok)}
-.empty{padding:28px;text-align:center;color:var(--ink-soft)}
-.modal-f{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.modal-f .sum{margin-right:auto;font-size:13px;color:var(--ink-soft)}
-textarea#copyArea{width:100%;height:120px;font-family:var(--f-mono);font-size:12px;background:var(--sheet);color:var(--ink);border:1px solid var(--rule);border-radius:6px}
-.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--sheet);padding:8px 14px;border-radius:8px;font-size:14px;z-index:60;opacity:0;transition:opacity .2s;pointer-events:none}
-.toast.show{opacity:1}
+/* дополнения к тренажёру внутри хаба */
+.back{display:inline-block;font-size:13px;color:var(--accent);text-decoration:none;margin-bottom:2px}
+.back:hover{text-decoration:underline}
+.exam-bar{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;background:var(--accent-soft);border:1.5px solid var(--accent);border-radius:10px;padding:10px 14px}
+.exam-bar .ex-t{display:flex;flex-direction:column;flex:1;min-width:14em}
+.exam-bar .ex-t b{font-family:var(--f-display);font-weight:500}
+.exam-bar .ex-t span{font-size:13px;color:var(--ink-soft)}
+.ex-dots{display:flex;gap:8px}
+.ex-dot{width:18px;height:18px;border-radius:50%;border:2px solid var(--rule);background:var(--sheet)}
+.ex-dot.now{border-color:var(--accent)} .ex-dot.ok{background:var(--ok);border-color:var(--ok)} .ex-dot.bad{background:var(--bad);border-color:var(--bad)}
+.v-t11.exam .controls,.v-t11.exam .tablecard,.v-t11.exam #showAnswer,.v-t11.exam #status .spacer~.chip:last-child{display:none}
+.v-t11.exam .grid{grid-template-areas:"circ expr"}
+@media (max-width:900px){.v-t11.exam .grid{grid-template-areas:"circ" "expr"}}
 </style>
 
-<div class="app">
-  <header class="top">
-    <div class="brand">
-      <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="18" r="11" fill="var(--glow)" stroke="var(--live)" stroke-width="2.4"/><path d="M12.5 10.5l15 15M27.5 10.5l-15 15" stroke="var(--live)" stroke-width="2"/><path d="M4 34h32" stroke="var(--ink)" stroke-width="2.4" stroke-linecap="round"/></svg>
-      <div><h1>Тренажёр логических схем</h1><p>Ключи, лампа, таблица истинности и логическое выражение</p></div>
+<div class="hub" id="view-map">
+  <header class="h-top">
+    <div class="h-brand">
+      <svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true"><path d="M4 38H14M30 38H40M22 30V24" stroke="var(--ink)" stroke-width="2.4" stroke-linecap="round"/><circle cx="22" cy="16" r="11" fill="var(--glow)" stroke="var(--live)" stroke-width="2.4"/><path d="M16 16h12M22 10v12" stroke="var(--live)" stroke-width="2"/><circle cx="14" cy="38" r="2.6" fill="var(--sheet)" stroke="var(--ink)" stroke-width="2"/><circle cx="30" cy="38" r="2.6" fill="var(--sheet)" stroke="var(--ink)" stroke-width="2"/><path d="M14 38L22 30L30 38" stroke="var(--ink)" stroke-width="2" fill="none"/></svg>
+      <div><h1>Алгебра логики</h1><p>Карта навыков · углублённый курс информатики, 10–11 класс</p></div>
     </div>
     <div class="controls">
-      <div class="field"><label for="student">Ученик</label><input type="text" id="student" placeholder="Фамилия Имя" autocomplete="off"></div>
-      <div class="field"><label for="seed">Схема №</label>
-        <div class="row"><input type="text" id="seed" spellcheck="false" autocomplete="off"><button class="btn" id="openSeed">Открыть</button><button class="btn ghost" id="copySeed" title="Скопировать номер схемы" aria-label="Скопировать номер схемы">⧉</button></div></div>
-      <div class="field"><label for="level">Уровень</label>
-        <div class="row"><select id="level"><option value="1">1 · две переменные</option><option value="2">2 · три переменные</option><option value="3">3 · до четырёх</option></select><button class="btn primary" id="newBtn">Новая схема</button></div></div>
-      <button class="btn" id="logBtn">Журнал ошибок <span class="pill" id="logCount">0</span></button>
+      <div class="field"><label for="hStudent">Ученик</label><input type="text" id="hStudent" placeholder="Фамилия Имя" autocomplete="off"></div>
+      <button class="btn" id="hLogBtn">Журнал</button>
+      <button class="btn" id="hCodesBtn">Коды и перенос</button>
     </div>
   </header>
 
-  <div class="status" id="status"></div>
+  <section class="h-summary" id="hSummary" aria-live="polite"></section>
 
-  <main class="grid">
-    <section class="card circ">
-      <div class="card-h"><span class="step">1</span><h2>Исследуй схему</h2>
-        <p>Нажимай на ключи или на кнопки переменных. Ключи с одной буквой связаны: они переключаются вместе. Клавиши <span class="kbd">A</span>–<span class="kbd">D</span> тоже работают.</p></div>
-      <div class="body">
-        <div class="board"><svg id="circuit" role="img" aria-label="Электрическая схема"></svg></div>
-        <div class="panel" id="varPanel"></div>
-        <div class="legend">
-          <span><svg width="46" height="22" viewBox="0 0 46 22"><rect x="1" y="1" width="44" height="20" rx="5" class="kbox dir"/><line x1="4" y1="15" x2="12" y2="15" class="w"/><line x1="34" y1="15" x2="42" y2="15" class="w"/><circle cx="14" cy="15" r="2.5" class="contact"/><circle cx="32" cy="15" r="2.5" class="contact"/><line x1="14" y1="15" x2="30" y2="7" class="lever"/></svg>Прямой ключ <b style="color:var(--accent)">A</b>: замкнут при A&nbsp;=&nbsp;1</span>
-          <span><svg width="46" height="22" viewBox="0 0 46 22"><rect x="1" y="1" width="44" height="20" rx="5" class="kbox inv"/><line x1="4" y1="15" x2="12" y2="15" class="w"/><line x1="34" y1="15" x2="42" y2="15" class="w"/><circle cx="14" cy="15" r="2.5" class="contact"/><circle cx="32" cy="15" r="2.5" class="contact"/><line x1="14" y1="15" x2="32" y2="15" class="lever"/></svg>Инверсный ключ <b style="color:var(--inv);text-decoration:overline">A</b>: замкнут при A&nbsp;=&nbsp;0</span>
-        </div>
-      </div>
-    </section>
+  <section class="h-map" aria-labelledby="mapTitle">
+    <div class="map-h"><h2 id="mapTitle">Дерево навыков</h2><p>Наведи на тему, чтобы увидеть путь к ней. Нажми, чтобы открыть.</p></div>
+    <p class="pan-hint">Карту можно двигать пальцем влево и вправо.</p>
+    <div class="map-scroll" id="hMapScroll"><div id="hMap" style="position:relative"></div></div>
+    <div class="m-branches" id="hBranches"></div>
+    <div class="m-legend" aria-label="Обозначения">
+      <span><svg width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="8" fill="#111a2f" stroke="#4a587a" stroke-width="2"/></svg>закрыта</span>
+      <span><svg width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="8" fill="#111a2f" stroke="#8fb0ff" stroke-width="2"/><circle cx="11" cy="11" r="10.5" fill="none" stroke="#8fb0ff" stroke-opacity=".5"/></svg>можно начинать</span>
+      <span><svg width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="8" fill="#111a2f" stroke="#8fb0ff" stroke-width="2"/><path d="M11 3a8 8 0 0 1 7.6 10.5" fill="none" stroke="#ffc94a" stroke-width="3" stroke-linecap="round"/></svg>в работе</span>
+      <span><svg width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="8" fill="#2a2110" stroke="#ffc94a" stroke-width="2"/><circle cx="11" cy="11" r="10" fill="none" stroke="#ffd970" stroke-opacity=".6" stroke-width="2"/></svg>освоена</span>
+      <span><svg width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="8" fill="none" stroke="#8796b6" stroke-width="2" stroke-dasharray="3 4"/></svg>тренажёр готовится</span>
+      <span><svg width="30" height="10" viewBox="0 0 30 10"><path d="M2 5h26" stroke="#ffc94a" stroke-width="2.6" stroke-linecap="round"/></svg>путь открыт освоенной темой</span>
+    </div>
+  </section>
 
-    <section class="card tablecard">
-      <div class="card-h"><span class="step">2</span><h2>Таблица истинности</h2>
-        <p>Заполни столбец F: 1, если лампа горит, 0, если нет. Нажми на набор переменных, чтобы выставить его на схеме. В ячейке F можно печатать 0 и 1, стрелки двигают по строкам.</p></div>
-      <div class="body">
-        <div class="tt-wrap"><table class="tt" id="tt"></table></div>
-        <div class="actions">
-          <button class="btn primary" id="checkTable">Проверить таблицу</button>
-          <button class="btn ghost" id="clearTable">Очистить</button>
-          <span class="tries" id="tableTries"></span>
-        </div>
-        <div class="msg" id="tableMsg"></div>
-      </div>
-    </section>
-
-    <section class="card expr">
-      <div class="card-h"><span class="step">3</span><h2>Логическое выражение</h2>
-        <p>Запиши функцию F для этой схемы. Последовательное соединение — конъюнкция, параллельное — дизъюнкция, инверсный ключ — отрицание.</p></div>
-      <div class="body">
-        <div class="exprline"><span class="pre">F =</span><input type="text" id="expr" placeholder="например: A ∧ (¬B ∨ C)" spellcheck="false" autocomplete="off" aria-label="Логическое выражение"></div>
-        <div class="preview" id="preview">&nbsp;</div>
-        <div class="pad" id="pad"></div>
-        <div class="actions">
-          <button class="btn primary" id="checkExpr">Проверить выражение</button>
-          <button class="btn ghost" id="showAnswer">Показать ответ</button>
-          <span class="tries" id="exprTries"></span>
-        </div>
-        <div class="msg" id="exprMsg"></div>
-        <p class="help">Можно писать по-разному: И — <code>∧ & * ·</code> или <code>и</code>, ИЛИ — <code>∨ | +</code> или <code>или</code>, НЕ — <code>¬ ! ~</code> или <code>не</code>. Запись <code>AB</code> читается как A ∧ B. Регистр и русские буквы А, В, С тоже понимаются. Синтаксические ошибки не считаются попыткой.</p>
-      </div>
-    </section>
-  </main>
+  <footer class="h-foot">
+    <p>Прогресс хранится в этом браузере. Чтобы продолжить на другом компьютере, возьми код в разделе «Коды и перенос» и вставь его там.</p>
+    <button class="btn ghost" id="hTeacherBtn">Для учителя</button>
+  </footer>
 </div>
 
-<div class="overlay" id="overlay" hidden>
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="logTitle">
-    <div class="modal-h"><h2 id="logTitle">Журнал</h2>
-      <label class="row" style="font-size:13px"><input type="checkbox" id="onlyCur"> только текущая схема</label>
-      <button class="btn ghost" id="closeLog" aria-label="Закрыть">✕</button></div>
-    <div class="tabs" role="tablist">
-      <button role="tab" id="tabErr" aria-selected="true">Ошибки</button>
-      <button role="tab" id="tabSch" aria-selected="false">Схемы и попытки</button>
+<div id="view-t1" class="v-t1" hidden></div>
+<div id="view-t2" class="v-t2" hidden></div>
+<div id="view-t3" class="v-t3" hidden></div>
+<div id="view-t11" class="v-t11" hidden></div>
+
+<!-- тема -->
+<div class="overlay" id="hNode" hidden>
+  <div class="modal narrow" role="dialog" aria-modal="true" aria-labelledby="hNodeTitle" id="hNodeBody"></div>
+</div>
+
+<!-- коды -->
+<div class="overlay" id="hCodes" hidden>
+  <div class="modal narrow" role="dialog" aria-modal="true" aria-labelledby="hCodesTitle">
+    <div class="modal-h"><h2 id="hCodesTitle">Коды и перенос</h2><button class="btn ghost" data-close aria-label="Закрыть">✕</button></div>
+    <div class="d-sec">
+      <h3>Код от учителя</h3>
+      <p>Учитель может открыть тему всему классу. Введи код с доски.</p>
+      <div class="code-row"><input type="text" id="tCodeIn" placeholder="7K-Q" autocomplete="off" spellcheck="false" aria-label="Код от учителя"><button class="btn primary" id="tCodeApply">Применить</button></div>
+      <div class="msg" id="tCodeMsg"></div>
     </div>
-    <div class="logwrap" id="logBody"></div>
-    <textarea id="copyArea" hidden readonly></textarea>
-    <div class="modal-f"><span class="sum" id="logSum"></span>
-      <button class="btn" id="copyLog">Скопировать журнал</button>
-      <button class="btn danger" id="clearLog">Очистить журнал</button></div>
+    <div class="d-sec">
+      <h3>Мой прогресс на другой компьютер</h3>
+      <p>Скопируй код и отправь себе, например в мессенджер. На другом компьютере открой эту страницу и вставь код ниже.</p>
+      <div class="code-row"><button class="btn" id="pShow">Показать мой код</button><button class="btn" id="pCopy" hidden>Скопировать</button></div>
+      <textarea class="code-box" id="pOut" readonly hidden aria-label="Код прогресса"></textarea>
+    </div>
+    <div class="d-sec">
+      <h3>Восстановить из кода</h3>
+      <textarea class="code-box" id="pIn" placeholder="AL1.…" spellcheck="false" aria-label="Вставь код прогресса"></textarea>
+      <div class="code-row"><button class="btn primary" id="pRestore">Восстановить</button><span class="tries">Прогресс сложится с тем, что уже есть на этом компьютере.</span></div>
+      <div class="msg" id="pMsg"></div>
+    </div>
   </div>
 </div>
-<div class="toast" id="toast"></div>
 
+<!-- учитель -->
+<div class="overlay" id="hTeacher" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="hTeacherTitle">
+    <div class="modal-h"><h2 id="hTeacherTitle">Для учителя</h2><button class="btn ghost" data-close aria-label="Закрыть">✕</button></div>
+    <div class="d-sec">
+      <h3>Открыть темы классу</h3>
+      <p>Отметь темы, которые нужно открыть без прохождения предыдущих. Код можно написать на доске: ученики вводят его в разделе «Коды и перенос». Ещё его можно дописать к адресу страницы: <code>#open-КОД</code>.</p>
+      <div class="t-list" id="tList"></div>
+      <div class="code-row"><span class="t-code" id="tCode">—</span><button class="btn" id="tCopy">Скопировать код</button></div>
+    </div>
+    <div class="d-sec">
+      <h3>Просмотр</h3>
+      <label class="switch"><input type="checkbox" id="tPreview"> Все темы открыты на этом устройстве, чтобы посмотреть тренажёры перед уроком</label>
+      <p class="tries">Коды не защищают темы паролем: это удобство для урока. Журнал каждого ученика хранится у него в браузере, ученик копирует его кнопкой «Журнал» и присылает.</p>
+    </div>
+  </div>
+</div>
+
+<!-- журнал -->
+<div class="overlay" id="hLog" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="hLogTitle">
+    <div class="modal-h"><h2 id="hLogTitle">Журнал по всем темам</h2><button class="btn ghost" data-close aria-label="Закрыть">✕</button></div>
+    <div class="logwrap" id="hLogBody"></div>
+    <textarea class="code-box" id="hLogCopy" readonly hidden aria-label="Журнал текстом"></textarea>
+    <div class="modal-f"><span class="sum" id="hLogSum"></span><button class="btn" id="hLogCopyBtn">Скопировать журнал</button></div>
+  </div>
+</div>
+<div class="toast" id="hToast"></div>
+
+<script src="core.js"></script>
+<script src="t1.js"></script>
+<script src="t2.js"></script>
+<script src="t3.js"></script>
+<script src="t11.js"></script>
 <script>
 (()=>{
 const $=s=>document.querySelector(s);
-const VARS='ABCD';
-const store={
-  get(k,d){try{const v=localStorage.getItem('logic-trainer.'+k);return v==null?d:JSON.parse(v)}catch(e){return d}},
-  set(k,v){try{localStorage.setItem('logic-trainer.'+k,JSON.stringify(v))}catch(e){}}
-};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const N=AL.NODES,B=AL.byId;
+const LANE_COLS=['trans','sets','func','circ','ege'];
 
-/* ---------- PRNG по SEED ---------- */
-function xmur3(str){let h=1779033703^str.length;for(let i=0;i<str.length;i++){h=Math.imul(h^str.charCodeAt(i),3432918353);h=h<<13|h>>>19}
-  return()=>{h=Math.imul(h^(h>>>16),2246822507);h=Math.imul(h^(h>>>13),3266489909);return(h^=h>>>16)>>>0}}
-function mulberry32(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
-
-const LEVELS={1:{nv:[2,2],leaves:[2,3],pInv:.3},2:{nv:[3,3],leaves:[3,5],pInv:.35},3:{nv:[3,4],leaves:[5,7],pInv:.4}};
-
-function normSeed(raw,lvl){
-  let s=String(raw||'').toUpperCase().replace(/[^A-Z0-9-]/g,'').replace(/^-+|-+$/g,'');
-  if(!s) return null;
-  if(!/^[123]-./.test(s)) s=lvl+'-'+s;
-  return s.slice(0,24);
-}
-function randomSeed(lvl){const A='ABCDEFGHJKMNPQRSTUVWXYZ23456789';let s='';for(let i=0;i<5;i++)s+=A[Math.floor(Math.random()*A.length)];return lvl+'-'+s}
-
-/* ---------- схема: дерево последовательных (s) и параллельных (p) соединений ---------- */
-function evalNode(n,env){
-  if(n.t==='k') return n.inv? !env[n.v] : !!env[n.v];
-  return n.t==='s'? n.c.every(c=>evalNode(c,env)) : n.c.some(c=>evalNode(c,env));
-}
-function leavesOf(n,a=[]){if(n.t==='k')a.push(n);else n.c.forEach(c=>leavesOf(c,a));return a}
-function envOf(vars,mask){const e={};vars.forEach((v,i)=>e[v]=(mask>>(vars.length-1-i))&1);return e}
-
-function generate(seed){
-  const level=+seed[0];const L=LEVELS[level];
-  const rng=mulberry32(xmur3(seed)());
-  const ri=(a,b)=>a+Math.floor(rng()*(b-a+1));
-  const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
-  function gen(n,parent){
-    if(n===1) return {t:'k'};
-    const t=parent?(parent==='s'?'p':'s'):(rng()<.5?'s':'p');
-    let parts=(n>=4&&rng()<.35)?3:2;
-    const sizes=Array(parts).fill(1);let left=n-parts;
-    while(left-->0) sizes[Math.floor(rng()*parts)]++;
-    return {t,c:sizes.map(m=>gen(m,t))};
-  }
-  let last;
-  for(let attempt=0;attempt<400;attempt++){
-    const nv=ri(L.nv[0],L.nv[1]);
-    const n=ri(Math.max(nv,L.leaves[0]),L.leaves[1]);
-    const tree=gen(n,null);const lv=leavesOf(tree);
-    const vars=VARS.slice(0,nv).split('');
-    const pool=[...vars];while(pool.length<n)pool.push(vars[ri(0,nv-1)]);shuffle(pool);
-    lv.forEach((l,i)=>{l.v=pool[i];l.inv=rng()<L.pInv});
-    last={seed,level,vars,tree};
-    if(valid(last,level)) return last;
-  }
-  return last;
-}
-function valid(c,level){
-  const {vars,tree}=c;const lv=leavesOf(tree);const N=1<<vars.length;
-  const f=[];for(let m=0;m<N;m++)f.push(evalNode(tree,envOf(vars,m)));
-  if(f.every(x=>x)||f.every(x=>!x)) return false;
-  for(let i=0;i<vars.length;i++){const bit=1<<(vars.length-1-i);let dep=false;
-    for(let m=0;m<N;m++) if(f[m]!==f[m^bit]){dep=true;break}
-    if(!dep) return false;}
-  if(level>=2){const inv=lv.filter(l=>l.inv).length;if(inv===0||inv===lv.length)return false}
-  // нет одинаковых соседних ключей в одной группе
-  const bad=n=>n.t!=='k'&&(n.c.some((a,i)=>a.t==='k'&&n.c.some((b,j)=>j>i&&b.t==='k'&&a.v===b.v))||n.c.some(bad));
-  return !bad(tree);
-}
-function treeToExpr(n,parent){
-  if(n.t==='k') return (n.inv?'¬':'')+n.v;
-  const s=n.c.map(c=>treeToExpr(c,n.t)).join(n.t==='s'?' ∧ ':' ∨ ');
-  return (n.t==='p'&&parent==='s')?'('+s+')':s;
+function toast(t){const el=$('#hToast');el.textContent=t;el.classList.add('show');clearTimeout(toast.h);toast.h=setTimeout(()=>el.classList.remove('show'),2600)}
+function copyText(t,okMsg,fallbackEl){
+  const fb=()=>{if(fallbackEl){fallbackEl.hidden=false;fallbackEl.value=t;fallbackEl.focus();fallbackEl.select()}toast('Выделено: нажми Ctrl+C')};
+  try{navigator.clipboard.writeText(t).then(()=>toast(okMsg),fb)}catch(e){fb()}
 }
 
-/* ---------- раскладка и рисование ---------- */
-const KW=92,KUP=50,KDN=22,PX=18,GAP=6;
-function layout(n){
-  if(n.t==='k'){n.w=KW;n.up=KUP;n.dn=KDN;return}
-  n.c.forEach(layout);
-  if(n.t==='s'){n.w=n.c.reduce((a,c)=>a+c.w,0);n.up=Math.max(...n.c.map(c=>c.up));n.dn=Math.max(...n.c.map(c=>c.dn))}
-  else{
-    n.w=Math.max(...n.c.map(c=>c.w))+PX*2;
-    let y=0;n.anch=[];
-    n.c.forEach((c,i)=>{n.anch.push(y+c.up);y+=c.up+c.dn+(i<n.c.length-1?GAP:0)});
-    n.up=(n.anch[0]+n.anch[n.anch.length-1])/2;n.dn=y-n.up;
-  }
+/* ---------- статус темы для показа ---------- */
+function info(n){
+  const s=AL.status(n.id),st=AL.node(n.id),built=AL.isBuilt(n);
+  const bl=AL.blockers(n);
+  let line;
+  if(s==='mastered') line='Освоено'+(st.via==='exam'?' · зачёт':'');
+  else if(s==='locked') line='Закрыто · нужно: '+bl.map(b=>b.num).join(', ');
+  else if(!built) line='Тренажёр готовится';
+  else if(s==='progress') line=st.note||`${st.done} из ${st.total}`;
+  else line=AL.unlocks().has(n.id)&&bl.length?'Открыто учителем':'Можно начинать';
+  const p=st.total?Math.min(1,st.done/st.total):0;
+  return {s,st,built,line,p,bl};
 }
-function drawCircuit(c,env){
-  layout(c.tree);
-  const segs=[],bg=[],fg=[],dots=[];
-  const seg=(x1,y1,x2,y2,live)=>{if(x1!==x2||y1!==y2)segs.push([x1,y1,x2,y2,live])};
-  function draw(n,x,ay,live){
-    if(n.t==='k'){
-      const closed=evalNode(n,env),c1=x+22,c2=x+70,cls=n.inv?'inv':'dir';
-      seg(x,ay,c1-4,ay,live);seg(c2+4,ay,x+KW,ay,live);
-      const st=closed?'замкнут':'разомкнут';
-      bg.push(`<rect class="kbox ${cls}" x="${x+6}" y="${ay-46}" width="80" height="62" rx="8" data-var="${n.v}" tabindex="0" role="button" aria-label="${n.inv?'Инверсный':'Прямой'} ключ ${n.v}, ${st}"><title>${n.inv?'Инверсный':'Прямой'} ключ ${n.v}: ${st}. Нажми, чтобы переключить ${n.v}</title></rect>`);
-      fg.push(`<text class="klabel ${cls}" x="${x+46}" y="${ay-25}">${n.v}</text>`);
-      if(n.inv) fg.push(`<line class="kover" x1="${x+40}" y1="${ay-41}" x2="${x+52}" y2="${ay-41}"/>`);
-      fg.push(`<text class="kval" x="${x+82}" y="${ay+12}">${n.v}=${env[n.v]}</text>`);
-      const ex=closed?c2:c1+48*Math.cos(.5),ey=closed?ay:ay-48*Math.sin(.5)*0.9;
-      fg.push(`<line class="lever${live?' live':''}" x1="${c1}" y1="${ay}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}"/>`);
-      fg.push(`<circle class="contact" cx="${c1}" cy="${ay}" r="4"/><circle class="contact" cx="${c2}" cy="${ay}" r="4"/>`);
-      return;
-    }
-    if(n.t==='s'){let cx=x;n.c.forEach(ch=>{draw(ch,cx,ay,live);cx+=ch.w});return}
-    const top=ay-n.up,ys=n.anch.map(a=>top+a),cl=n.c.map(ch=>live&&evalNode(ch,env));
-    n.c.forEach((ch,i)=>{const yi=ys[i];seg(x,yi,x+PX,yi,cl[i]);draw(ch,x+PX,yi,cl[i]);seg(x+PX+ch.w,yi,x+n.w,yi,cl[i])});
-    const pts=[...new Set([...ys,ay])].sort((a,b)=>a-b);
-    for(let i=0;i<pts.length-1;i++){
-      const p=pts[i],q=pts[i+1];
-      const lv=q<=ay? cl.some((l,j)=>l&&ys[j]<=p) : cl.some((l,j)=>l&&ys[j]>=q);
-      if(q<=ay){seg(x,q,x,p,lv);seg(x+n.w,p,x+n.w,q,lv)}else{seg(x,p,x,q,lv);seg(x+n.w,q,x+n.w,p,lv)}
-    }
-    dots.push([x,ay,live],[x+n.w,ay,live]);
-    ys.forEach((y,i)=>{if(i>0&&i<ys.length-1)dots.push([x,y,cl[i]],[x+n.w,y,cl[i]])});
-  }
-  const T=14,bx0=66,t=c.tree,W=Math.max(t.w,300),ay=T+t.up,Lx=30,R=bx0+W+28,yb=T+t.up+t.dn+58;
-  const on=evalNode(t,env);
-  draw(t,bx0,ay,on);
-  seg(bx0+t.w,ay,bx0+W,ay,on);seg(bx0+W,ay,R,ay,on);seg(R,ay,R,yb,on);
-  const bX=Lx+(R-Lx)*.3,lX=Lx+(R-Lx)*.68;
-  seg(R,yb,lX+17,yb,on);seg(lX-17,yb,bX+6,yb,on);seg(bX-6,yb,Lx,yb,on);seg(Lx,yb,Lx,ay,on);seg(Lx,ay,bx0,ay,on);
-  const line=s=>`<line class="w${s[4]?' live':''}" x1="${s[0]}" y1="${s[1]}" x2="${s[2]}" y2="${s[3]}"/>`;
-  const flow=s=>`<line class="flow" x1="${s[0]}" y1="${s[1]}" x2="${s[2]}" y2="${s[3]}"/>`;
-  const H=yb+40,VW=R+30;
-  return {on,svg:`<defs><radialGradient id="halo"><stop offset="0" class="halo-stop" stop-opacity=".85"/><stop offset="1" class="halo-stop" stop-opacity="0"/></radialGradient></defs>
-  ${bg.join('')}<g>${segs.map(line).join('')}</g><g>${segs.filter(s=>s[4]).map(flow).join('')}</g>
-  ${dots.map(d=>`<circle class="jn${d[2]?' live':''}" cx="${d[0]}" cy="${d[1]}" r="3.6"/>`).join('')}
-  ${fg.join('')}
-  <line x1="${bX-6}" y1="${yb-17}" x2="${bX-6}" y2="${yb+17}" stroke="var(--ink)" stroke-width="2.4"/>
-  <line x1="${bX+6}" y1="${yb-8}" x2="${bX+6}" y2="${yb+8}" stroke="var(--ink)" stroke-width="5"/>
-  <text class="term" x="${bX-17}" y="${yb-16}">+</text><text class="term" x="${bX+17}" y="${yb-16}">−</text>
-  <text class="cap" x="${bX}" y="${yb+33}">батарея</text>
-  <circle class="halo${on?' on':''}" cx="${lX}" cy="${yb}" r="40"/>
-  <circle class="bulb${on?' on':''}" cx="${lX}" cy="${yb}" r="16"/>
-  <path d="M${lX-11} ${yb-11}L${lX+11} ${yb+11}M${lX+11} ${yb-11}L${lX-11} ${yb+11}" stroke="${on?'var(--live)':'var(--ink)'}" stroke-width="2"/>
-  <text class="cap" x="${lX}" y="${yb+33}">лампа F = ${on?1:0}</text>`,vb:`0 0 ${VW} ${H}`};
+/* ---------- дерево навыков ---------- */
+const POS={n1:[500,58],n2:[330,192],n3:[500,205],
+  n4:[150,335],n5:[238,478],n6:[150,612],
+  n7:[338,352],e15:[345,650],
+  n8:[500,352],n9:[488,485],n10:[518,615],
+  n11:[690,340],n12:[730,472],n13:[700,605],
+  e2:[878,320]};
+const HUE={base:'--h-base',trans:'--h-trans',sets:'--h-sets',func:'--h-func',circ:'--h-circ',ege:'--h-ege'};
+const CAPS=[['trans','Преобразования',150,700],['sets','Множества',352,442,'start'],['func','Функции',510,700],['circ','Схемы',712,690],['ege','ЕГЭ',878,255],['ege','ЕГЭ',345,745]];
+const T=(t,sz=12)=>`<text x="12" y="${12+sz*0.36}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-weight="600" font-size="${sz}" fill="currentColor" stroke="none">${t}</text>`;
+const ICON={
+  n1:'<path d="M4 5h16v10h-9l-4 4v-4H4z"/><path d="M8.5 10l2.3 2.3L15.5 7.8"/>',
+  n2:T('∀∃',12),
+  n3:'<rect x="4" y="4" width="16" height="16" rx="1.5"/><path d="M12 4v16M4 9.3h16M4 14.6h16"/><path d="M14.5 6.6h3M14.5 12h3M14.5 17.3h3" stroke-width="2.4"/>',
+  n4:T('≡',20),
+  n5:'<path d="M12 4v15M8 20h8M5 7.5h14"/><path d="M5 7.5l-3 6h6zM19 7.5l-3 6h6z"/>',
+  n6:T('=1',13),
+  n7:'<circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/>',
+  n8:T('f',17),
+  n9:'<rect x="4" y="4" width="16" height="16" rx="1.5"/><path d="M4 9.3h16M4 14.6h16"/><rect x="5.5" y="10.6" width="13" height="2.7" fill="currentColor" stroke="none"/><path d="M21.5 12h1"/>',
+  n10:'<path d="M4 6h6a6 6 0 0 1 0 12H4z"/><circle cx="18.2" cy="12" r="2"/><path d="M1.5 9h2.5M1.5 15h2.5M20.2 12h2.3"/>',
+  n11:'<circle cx="5" cy="16" r="1.8"/><circle cx="19" cy="16" r="1.8"/><path d="M6.6 15.2L17 9"/><path d="M1 16h2.2M20.8 16H23"/>',
+  n12:T('Σ',17),
+  n13:'<path d="M2 17h4V7h6v10h4V7h6"/>',
+  e2:'<rect x="4" y="4" width="16" height="16" rx="1.5"/><path d="M12 4v16M4 12h16"/>'+'<text x="16" y="10.3" text-anchor="middle" font-family="JetBrains Mono,monospace" font-weight="700" font-size="7" fill="currentColor" stroke="none">?</text>',
+  e15:'<path d="M2 14h20"/><path d="M8 9v10M16 9v10" stroke-width="2"/><path d="M8 14h8" stroke-width="4"/>'
+};
+const live=id=>AL.node(id).mastered;
+const EDGES=[];N.forEach(n=>n.req.forEach(r=>EDGES.push([r,n.id])));
+function wrapTitle(t){
+  const w=t.split(' ');const lines=[];let cur='';
+  w.forEach(x=>{if((cur+' '+x).trim().length>13&&cur){lines.push(cur);cur=x}else cur=(cur+' '+x).trim()});
+  if(cur)lines.push(cur);return lines.slice(0,2);
 }
-
-/* ---------- разбор выражения ---------- */
-const CYR={'А':'A','В':'B','С':'C','Д':'D','а':'A','в':'B','с':'C','д':'D'};
-const WORDS={and:'AND','и':'AND',or:'OR','или':'OR',not:'NOT','не':'NOT',xor:'XOR'};
-function PErr(msg,pos){this.msg=msg;this.pos=pos}
-function tokenize(s){
-  const T=[];let i=0;const push=(type,pos,v)=>T.push({type,pos,v});
-  const rx=[[/^(<->|<=>)/,'EQ'],[/^(->|=>)/,'IMP'],[/^(==|=|≡|⇔|↔)/,'EQ'],[/^(→|⇒)/,'IMP'],[/^(&&|[∧&*·⋅])/,'AND'],[/^(\|\||[∨|+])/,'OR'],[/^[⊕^]/,'XOR'],[/^[¬!~]/,'NOT'],[/^[(\[]/,'LP'],[/^[)\]]/,'RP'],[/^[01]/,'CONST']];
-  outer: while(i<s.length){
-    const ch=s[i];if(/\s/.test(ch)){i++;continue}
-    const rest=s.slice(i);
-    for(const [r,t] of rx){const m=r.exec(rest);if(m){push(t,i,t==='CONST'?+m[0]:undefined);i+=m[0].length;continue outer}}
-    const m=/^[A-Za-zА-Яа-яЁё]+/.exec(rest);
-    if(m){
-      const w=m[0],lw=w.toLowerCase();
-      if(WORDS[lw]){push(WORDS[lw],i);i+=w.length;continue}
-      for(let k=0;k<w.length;k++){
-        const c=w[k];let v=CYR[c]||(/[A-Za-z]/.test(c)?c.toUpperCase():null);
-        if(!v) throw new PErr(`Непонятная буква «${c}». Переменные пишутся латиницей: A, B, C, D`,i+k);
-        const over=/[̄̅]/.test(s[i+k+1]||'');
-        if(over) push('NOT',i+k);
-        push('VAR',i+k,v);
-        if(over&&k===w.length-1){i+=1}
-      }
-      i+=w.length;continue;
-    }
-    if(/[̄̅]/.test(ch)){i++;continue}
-    throw new PErr(`Непонятный символ «${ch}»`,i);
-  }
-  return T;
+function ancestors(id,acc=new Set()){B[id].req.forEach(r=>{if(!acc.has(r)){acc.add(r);ancestors(r,acc)}});return acc}
+let nextId=null;
+function renderMap(){
+  nextId=(N.find(n=>AL.isBuilt(n)&&['open','progress'].includes(AL.status(n.id)))||{}).id;
+  const R=n=>AL.isBuilt(n)?34:29;
+  let edges='',flows='';
+  EDGES.forEach(([a,b])=>{
+    const [x1,y1]=POS[a],[x2,y2]=POS[b],ra=R(B[a]),rb=R(B[b]);
+    const sy=y1+ra,ey=y2-rb-4,my=(sy+ey)/2;
+    const d=`M${x1} ${sy}C${x1} ${my} ${x2} ${my} ${x2} ${ey}`;
+    const hue=`var(${HUE[B[b].lane]})`;
+    const cls=live(a)?'live':AL.status(b)!=='locked'&&AL.isBuilt(B[b])?'avail':'';
+    edges+=`<path class="edge ${cls}" data-e="${a}>${b}" d="${d}" stroke="${hue}"/>`;
+    if(live(a))flows+=`<path class="flow" d="${d}"/>`;
+  });
+  const caps=CAPS.map(([l,t,x,y,a])=>`<text class="cap" x="${x}" y="${y}" fill="var(${HUE[l]})"${a?` style="text-anchor:${a}"`:''}>${t}</text>`).join('');
+  const nodes=N.map(n=>{
+    const i=info(n),[x,y]=POS[n.id],r=R(n),hue=`var(${HUE[n.lane]})`;
+    const C=2*Math.PI*(r+6);
+    const arc=i.s==='progress'&&i.p>0?`<circle class="arc" r="${r+6}" stroke-dasharray="${(C*i.p).toFixed(1)} ${C.toFixed(1)}" transform="rotate(-90)"/>`:'';
+    const halo=`<circle class="halo" r="${r+12}" fill="url(#${i.s==='mastered'?'gHaloGold':'gHaloBlue'})"/>`;
+    const ring2=AL.isBuilt(n)?`<circle class="ring2" r="${r+5}" stroke="${hue}"/>`:'';
+    const lines=wrapTitle(n.title);
+    const lbl=`<text class="lbl" y="${r+20}"><tspan class="n">${esc(n.num)}</tspan> ${esc(lines[0])}${lines[1]?`<tspan x="0" dy="16">${esc(lines[1])}</tspan>`:''}</text>`;
+    let badge='';
+    if(i.s==='locked')badge=`<g class="badge" transform="translate(${r*0.72} ${r*0.72})"><circle r="10" fill="#0b1222" stroke="#4a587a" stroke-width="1.5"/><rect x="-4.5" y="-1" width="9" height="6.5" rx="1.2" fill="#8796b6"/><path d="M-2.6 -1v-2.2a2.6 2.6 0 0 1 5.2 0V-1" fill="none" stroke="#8796b6" stroke-width="1.6"/></g>`;
+    else if(i.s==='mastered')badge=`<g class="badge" transform="translate(${r*0.72} ${-r*0.72})"><circle r="10" fill="#ffc94a"/><path d="M-4.5 0l3 3 6-6" fill="none" stroke="#2a2110" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></g>`;
+    const here=n.id===nextId?`<g class="here" aria-hidden="true"><path d="M0 ${-r-14}l-8 -11h16z" fill="var(--m-glow)" filter="url(#fGlowSoft)"/></g>`:'';
+    return `<g class="mnode s-${i.s} ${AL.isBuilt(n)?'built':'soon'}" data-id="${n.id}" transform="translate(${x} ${y})" tabindex="0" role="button"
+      aria-label="Тема ${esc(n.num)}: ${esc(n.title)}. ${esc(i.line)}" style="--tipc:${hue}">
+      <circle class="hit" r="${r+18}"/>${halo}<g class="scale">${ring2}<circle class="disc" r="${r}" stroke="${hue}"/>${arc}
+      <g class="ico" transform="translate(${-12*r/26} ${-12*r/26}) scale(${r/26})" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICON[n.id]}</g>${badge}</g>${here}${lbl}</g>`;
+  }).join('');
+  const defs=`<defs>
+    <pattern id="pDots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="var(--m-dot)"/></pattern>
+    <radialGradient id="gHaloGold"><stop offset="40%" stop-color="#ffd970" stop-opacity=".55"/><stop offset="100%" stop-color="#ffd970" stop-opacity="0"/></radialGradient>
+    <radialGradient id="gHaloBlue"><stop offset="45%" stop-color="#8fb0ff" stop-opacity=".45"/><stop offset="100%" stop-color="#8fb0ff" stop-opacity="0"/></radialGradient>
+    <filter id="fGlowSoft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="fGlowText" x="-30%" y="-60%" width="160%" height="220%"><feGaussianBlur stdDeviation="2.4" result="b"/><feFlood flood-color="#8fb0ff" flood-opacity=".9"/><feComposite in2="b" operator="in" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>`;
+  $('#hMap').innerHTML=`<svg class="skill-svg" viewBox="0 0 1000 765" role="group" aria-label="Дерево навыков">${defs}
+    <rect width="1000" height="765" fill="url(#pDots)"/>${caps}<g>${edges}</g><g>${flows}</g><g>${nodes}</g></svg><div class="m-tip" id="mTip" hidden></div>`;
+  $('#hBranches').innerHTML=AL.LANES.map(l=>`<span><i style="background:var(${HUE[l.id]})"></i>${esc(l.title)}</span>`).join('');
+  // на узком экране — прокрутить к следующему шагу
+  const sc=$('#hMapScroll');
+  if(nextId&&sc.scrollWidth>sc.clientWidth+4){const x=POS[nextId][0]/1000*sc.scrollWidth;sc.scrollLeft=Math.max(0,x-sc.clientWidth/2)}
 }
-const NAMES={AND:'∧',OR:'∨',XOR:'⊕',IMP:'→',EQ:'≡',NOT:'¬',RP:')',LP:'('};
-function parse(src){
-  const T=tokenize(src);let p=0;
-  if(!T.length) throw new PErr('Введите выражение',0);
-  const peek=()=>T[p],next=()=>T[p++];
-  const startsOperand=t=>t&&(t.type==='VAR'||t.type==='CONST'||t.type==='LP'||t.type==='NOT');
-  function eq(){let l=imp();while(peek()&&peek().type==='EQ'){next();l={op:'eq',a:l,b:imp()}}return l}
-  function imp(){const l=or();if(peek()&&peek().type==='IMP'){next();return{op:'imp',a:l,b:imp()}}return l}
-  function or(){let l=and();while(peek()&&(peek().type==='OR'||peek().type==='XOR')){const t=next().type;l={op:t==='OR'?'or':'xor',a:l,b:and()}}return l}
-  function and(){let l=not();for(;;){const t=peek();if(t&&t.type==='AND'){next();l={op:'and',a:l,b:not()}}else if(startsOperand(t)){l={op:'and',a:l,b:not()}}else break}return l}
-  function not(){if(peek()&&peek().type==='NOT'){next();return{op:'not',a:not()}}return atom()}
-  function atom(){
-    const t=next();
-    if(!t) throw new PErr('Выражение не закончено: после знака нужна переменная или «(»',src.length);
-    if(t.type==='VAR') return {op:'var',v:t.v};
-    if(t.type==='CONST') return {op:'const',v:t.v};
-    if(t.type==='LP'){const e=eq();const r=next();if(!r||r.type!=='RP') throw new PErr('Не хватает закрывающей скобки «)»',r?r.pos:src.length);return e}
-    throw new PErr(`Здесь ожидалась переменная, а стоит «${NAMES[t.type]||t.type}»`,t.pos);
-  }
-  const e=eq();
-  if(p<T.length){const t=T[p];throw new PErr(t.type==='RP'?'Лишняя закрывающая скобка «)»':`Лишний знак «${NAMES[t.type]||t.v}»`,t.pos)}
-  return e;
-}
-function evalAst(n,env){switch(n.op){
-  case'var':return !!env[n.v];case'const':return !!n.v;case'not':return !evalAst(n.a,env);
-  case'and':return evalAst(n.a,env)&&evalAst(n.b,env);case'or':return evalAst(n.a,env)||evalAst(n.b,env);
-  case'xor':return evalAst(n.a,env)!==evalAst(n.b,env);case'imp':return !evalAst(n.a,env)||evalAst(n.b,env);
-  case'eq':return evalAst(n.a,env)===evalAst(n.b,env)}}
-function astVars(n,s=new Set()){if(n.op==='var')s.add(n.v);if(n.a)astVars(n.a,s);if(n.b)astVars(n.b,s);return s}
-const PREC={eq:1,imp:2,or:3,xor:3,and:4,not:5,var:6,const:6},SYM={eq:' ≡ ',imp:' → ',or:' ∨ ',xor:' ⊕ ',and:' ∧ '};
-function pretty(n,pp=0){
-  let s;
-  if(n.op==='var')s=n.v;else if(n.op==='const')s=String(n.v);
-  else if(n.op==='not')s='¬'+pretty(n.a,5);
-  else s=pretty(n.a,PREC[n.op])+SYM[n.op]+pretty(n.b,PREC[n.op]+(n.op==='imp'?0:.5));
-  return PREC[n.op]<pp?'('+s+')':s;
+function focusNode(id){
+  const svg=$('#hMap svg');if(!svg)return;
+  svg.querySelectorAll('.hl,.cur').forEach(e=>e.classList.remove('hl','cur'));
+  const tip=$('#mTip');
+  if(!id){svg.classList.remove('focus');tip.hidden=true;return}
+  const anc=ancestors(id);anc.add(id);
+  svg.classList.add('focus');
+  anc.forEach(a=>{const g=svg.querySelector(`.mnode[data-id="${a}"]`);g&&g.classList.add('hl')});
+  svg.querySelector(`.mnode[data-id="${id}"]`).classList.add('cur');
+  EDGES.forEach(([a,b])=>{if(anc.has(a)&&anc.has(b))svg.querySelector(`.edge[data-e="${a}>${b}"]`).classList.add('hl')});
+  const n=B[id],i=info(n),g=svg.querySelector(`.mnode[data-id="${id}"] .disc`).getBoundingClientRect(),box=$('#hMap').getBoundingClientRect();
+  tip.style.setProperty('--tipc',`var(${HUE[n.lane]})`);
+  tip.innerHTML=`<b>${esc(n.num)} · ${esc(n.title)}</b><span>${esc(i.line)}</span><i>${i.s==='locked'?'Нажми, чтобы узнать, как открыть':i.built?'Нажми, чтобы начать':'Нажми, чтобы узнать, что в теме'}</i>`;
+  tip.style.left=(g.left+g.width/2-box.left)+'px';tip.style.top=(g.top-box.top)+'px';tip.hidden=false;
 }
 
-/* ---------- состояние ---------- */
-let S=null;
-let progress=store.get('progress',{});
-let log=store.get('log',[]);
-let level=store.get('level',2);
-const saveP=()=>store.set('progress',progress);
-const saveL=()=>store.set('log',log);
-function P(){return progress[S.seed]||(progress[S.seed]={level:S.level,tableTries:0,exprTries:0,tableOk:false,exprOk:false,answerShown:false,draft:null,first:new Date().toISOString()})}
-function addLog(stage,input,note){
-  log.push({t:new Date().toISOString(),seed:S.seed,student:$('#student').value.trim(),stage,input,note});
-  if(log.length>3000)log=log.slice(-3000);saveL();updateLogCount();
+/* ---------- сводка ---------- */
+function renderSummary(){
+  const mastered=N.filter(n=>AL.node(n.id).mastered).length,built=N.filter(AL.isBuilt).length;
+  const next=N.find(n=>AL.isBuilt(n)&&['open','progress'].includes(AL.status(n.id)));
+  const bulbs=N.map(n=>`<i class="${AL.node(n.id).mastered?'on':''} ${AL.isBuilt(n)?'':'soon'}" title="${esc(n.num+' '+n.title)}"></i>`).join('');
+  let nx;
+  if(next){const i=info(next);nx=`<div class="next"><div class="nx-t"><b>${esc(next.num)} · ${esc(next.title)}</b><span>${esc(i.line)}</span></div>
+      <a class="btn primary" href="#${next.trainer}">${i.s==='progress'?'Продолжить':'Начать'} →</a></div>`}
+  else nx=`<div class="next"><div class="nx-t"><b>Готовые тренажёры пройдены</b><span>Новые темы появятся на этой карте. Освоенное сохранится.</span></div></div>`;
+  $('#hSummary').innerHTML=`<div class="sum-card"><span class="lbl">Освоено тем</span>
+      <div class="sum-big">${mastered} из ${N.length}<small>тренажёров готово: ${built} из ${N.length}</small></div>
+      <div class="bulbs" aria-hidden="true">${bulbs}</div></div>
+    <div class="sum-card"><span class="lbl">Следующий шаг</span>${nx}</div>`;
 }
+function renderHub(){renderSummary();renderMap()}
 
-function loadSeed(seed,push=true){
-  const c=generate(seed);
-  S={...c,env:Object.fromEntries(c.vars.map(v=>[v,0])),marks:null};
-  const p=P();S.table=Array.isArray(p.draft)&&p.draft.length===1<<c.vars.length?p.draft.slice():Array(1<<c.vars.length).fill('');
-  level=c.level;$('#level').value=String(level);$('#seed').value=seed;
-  if(push&&location.hash.slice(1)!==seed){try{history.replaceState(null,'','#'+seed)}catch(e){location.hash=seed}}
-  $('#expr').value='';updPreview();
-  hideMsg('#tableMsg');hideMsg('#exprMsg');
-  if(p.exprOk) showMsg('#exprMsg','ok','<b>Решено.</b> Эта схема уже сдана. Можно потренироваться ещё или взять новую.');
-  renderAll();
-}
-function renderAll(){renderCircuit();renderVars();renderTable();renderPad();renderStatus()}
-
-function renderCircuit(){
-  const r=drawCircuit(S,S.env);const svg=$('#circuit');
-  svg.setAttribute('viewBox',r.vb);svg.innerHTML=r.svg;S.on=r.on;
-  const [,,w]=r.vb.split(' ').map(Number);svg.style.maxWidth=Math.max(w*1.35,420)+'px';svg.style.margin='0 auto';
-}
-function toggleVar(v){if(!(v in S.env))return;S.env[v]^=1;renderCircuit();renderVars();markNowRow()}
-function renderVars(){
-  $('#varPanel').innerHTML=S.vars.map(v=>`<button class="vbtn" data-var="${v}" aria-pressed="${!!S.env[v]}">${v}<span class="v">${S.env[v]}</span></button>`).join('')+
-   `<button class="btn ghost" id="resetVars">Все в 0</button><span class="lampstate${S.on?' on':''}">Лампа ${S.on?'горит':'не горит'} <span class="v">F = ${S.on?1:0}</span></span>`;
-}
-function curMask(){return S.vars.reduce((m,v)=>(m<<1)|S.env[v],0)}
-function renderTable(){
-  const n=S.vars.length,N=1<<n,cm=curMask();
-  let h=`<thead><tr><th></th>${S.vars.map(v=>`<th>${v}</th>`).join('')}<th class="f">F</th></tr></thead><tbody>`;
-  for(let m=0;m<N;m++){
-    const e=envOf(S.vars,m),val=S.table[m],mk=S.marks?S.marks[m]:'';
-    h+=`<tr data-m="${m}" class="${m===cm?'now':''}"><td class="n">${m+1}</td>${S.vars.map(v=>`<td class="set" data-m="${m}" title="Выставить этот набор на схеме">${e[v]}</td>`).join('')}
-    <td class="fc"><button class="fbtn${val!==''?' filled':''}${mk?' '+mk:''}" data-m="${m}" aria-label="F в строке ${m+1}">${val}</button></td></tr>`;
-  }
-  $('#tt').innerHTML=h+'</tbody>';
-  const p=P();$('#tableTries').textContent=`Попыток: ${p.tableTries}${p.tableOk?' · сдано':''}`;
-}
-function markNowRow(){const cm=curMask();document.querySelectorAll('#tt tbody tr').forEach(tr=>tr.classList.toggle('now',+tr.dataset.m===cm))}
-function setCell(m,v){S.table[m]=v;S.marks=null;const p=P();p.draft=S.table.slice();saveP();renderTable();const b=document.querySelector(`.fbtn[data-m="${m}"]`);b&&b.focus()}
-function renderPad(){
-  const keys=[...S.vars.map(v=>[v,v,'']),['¬','¬','op'],['∧',' ∧ ','op'],['∨',' ∨ ','op'],['(','(',''],[')',')',''],['⌫','BS',''],['Сброс','CLR','']];
-  $('#pad').innerHTML=keys.map(([l,ins,c])=>`<button class="${c}" data-ins="${esc(ins)}" title="${l==='⌫'?'Удалить символ':l==='Сброс'?'Очистить поле':l}">${l}</button>`).join('');
-  const p=P();$('#exprTries').textContent=`Попыток: ${p.exprTries}${p.exprOk?' · сдано':''}`;
-}
-function renderStatus(){
-  const p=P(),solved=Object.values(progress).filter(x=>x.exprOk).length;
-  const tries=Object.values(progress).reduce((a,x)=>a+x.tableTries+x.exprTries,0);
-  const chip=(cls,txt)=>`<span class="chip ${cls}"><span class="dot"></span>${txt}</span>`;
-  const tErr=log.filter(l=>l.seed===S.seed&&l.stage==='Таблица').length,eErr=log.filter(l=>l.seed===S.seed&&l.stage==='Выражение').length;
-  $('#status').innerHTML=
-    chip(p.tableOk?'ok':tErr?'bad':'',`Таблица: <b>${p.tableOk?'верно':p.tableTries?'ошибок '+tErr:'не проверена'}</b>`)+
-    chip(p.exprOk?'ok':eErr?'bad':'',`Выражение: <b>${p.exprOk?'верно':p.exprTries?'ошибок '+eErr:'не проверено'}</b>`)+
-    (p.answerShown?chip('bad','Ответ был показан'):'')+
-    `<span class="spacer"></span>`+chip('',`Уровень <b>${S.level}</b> · ключей <b>${leavesOf(S.tree).length}</b>`)+
-    chip('',`Решено схем: <b>${solved}</b> · всего попыток: <b>${tries}</b>`);
-  updateLogCount();
-}
-function updateLogCount(){$('#logCount').textContent=log.filter(l=>l.stage!=='Верно').length}
-
-function showMsg(sel,cls,html){const el=$(sel);el.className='msg show '+cls;el.innerHTML=html}
-function hideMsg(sel){$(sel).className='msg'}
-const fmtEnv=e=>Object.entries(e).map(([k,v])=>`${k}=${v}`).join(', ');
-
-/* ---------- проверки ---------- */
-function checkTable(){
-  const N=1<<S.vars.length,empty=S.table.map((v,i)=>v===''?i+1:0).filter(Boolean);
-  if(empty.length){showMsg('#tableMsg','info',`Заполни все строки. Пустые: ${empty.join(', ')}.`);return}
-  const p=P();p.tableTries++;
-  const wrong=[];S.marks=[];
-  for(let m=0;m<N;m++){const f=evalNode(S.tree,envOf(S.vars,m))?1:0;const ok=+S.table[m]===f;S.marks.push(ok?'ok':'bad');if(!ok)wrong.push(m)}
-  if(!wrong.length){
-    p.tableOk=true;showMsg('#tableMsg','ok',`<b>Верно!</b> Таблица заполнена правильно с ${p.tableTries}-й попытки. Теперь запиши выражение.`);
-    addLog('Верно','таблица',`с ${p.tableTries}-й попытки`);
+/* ---------- диалог темы ---------- */
+function openModal(id){const o=$(id);o.hidden=false;const f=o.querySelector('[data-close], .btn');f&&f.focus()}
+function closeModals(){document.querySelectorAll('.hub~.overlay').forEach(o=>o.hidden=true)}
+function openNode(id){
+  const n=B[id],i=info(n);
+  let acts='';
+  if(i.s==='locked'){
+    acts=`<div class="d-sec"><h3>Как открыть</h3><p>Освой ${i.bl.length>1?'темы':'тему'} ${i.bl.map(b=>`<button class="linkish" data-goto="${b.id}">${esc(b.num)} · ${esc(b.title)}</button>`).join(' и ')}. Если ${i.bl.length>1?'они уже знакомы':'она уже знакома'}, сдай по ней зачёт, и эта тема откроется сразу.</p>
+      <p>Есть код от учителя? <button class="linkish" data-codes>Ввести код</button></p></div>`;
+  }else if(i.built){
+    const tr=n.trainer;
+    acts=`<div class="actions"><a class="btn primary" href="#${tr}">${i.s==='mastered'?'Открыть тренажёр':i.s==='progress'?'Продолжить':'Начать'} →</a>
+      ${n.exam&&i.s!=='mastered'?`<a class="btn" href="#${tr}-exam">Знаю тему: сдать зачёт</a>`:''}</div>`;
   }else{
-    showMsg('#tableMsg','bad',`<b>Ошибка.</b> Неверных строк: ${wrong.length} из ${N}. Они отмечены красным. Выставь эти наборы на схеме и посмотри на лампу.`);
-    addLog('Таблица','F = '+S.table.join(''),'Неверные строки: '+wrong.map(m=>`№${m+1} (${fmtEnv(envOf(S.vars,m))}: ввод ${S.table[m]})`).join('; '));
+    acts=`<div class="msg show info">Тренажёр по этой теме ещё в разработке. Когда он появится, тема заработает прямо на карте, а прогресс по остальным темам сохранится.</div>`;
   }
-  saveP();renderTable();renderStatus();
-}
-function updPreview(){
-  const src=$('#expr').value,el=$('#preview');
-  if(!src.trim()){el.className='preview';el.innerHTML='&nbsp;';return null}
-  try{const a=parse(src);el.className='preview';el.textContent='Читается как: F = '+pretty(a);return a}
-  catch(e){if(!(e instanceof PErr))throw e;el.className='preview err';el.textContent=`${e.msg} (позиция ${e.pos+1})`;return null}
-}
-function checkExpr(){
-  const src=$('#expr').value;let ast;
-  try{ast=parse(src)}catch(e){if(!(e instanceof PErr))throw e;showMsg('#exprMsg','info',`Выражение не разобрано: ${esc(e.msg)}. Это не считается попыткой.`);return}
-  const extra=[...astVars(ast)].filter(v=>!S.vars.includes(v));
-  if(extra.length){showMsg('#exprMsg','info',`В этой схеме нет переменн${extra.length>1?'ых':'ой'} ${extra.join(', ')}. Используй только ${S.vars.join(', ')}. Попытка не засчитана.`);return}
-  const p=P();p.exprTries++;
-  const N=1<<S.vars.length;let diff=null,cnt=0;
-  for(let m=0;m<N;m++){const e=envOf(S.vars,m);const a=evalNode(S.tree,e),b=evalAst(ast,e);if(a!==b){cnt++;if(!diff)diff={e,a,b,m}}}
-  const pr=pretty(ast);
-  if(!diff){
-    p.exprOk=true;
-    showMsg('#exprMsg','ok',`<b>Верно!</b> F = ${esc(pr)} совпадает со схемой на всех ${N} наборах. Попытка ${p.exprTries}.
-      <div class="actions"><button class="btn primary" id="nextSeed">Следующая схема →</button></div>`);
-    addLog('Верно',pr,`выражение с ${p.exprTries}-й попытки`);
-  }else{
-    showMsg('#exprMsg','bad',`<b>Ошибка.</b> Не совпадает при ${fmtEnv(diff.e)}: лампа ${diff.a?'горит (F = 1)':'не горит (F = 0)'}, а выражение даёт ${diff.b?1:0}. Всего расхождений: ${cnt} из ${N}.
-      <div class="actions"><button class="btn" id="showDiff" data-m="${diff.m}">Выставить этот набор на схеме</button></div>`);
-    addLog('Выражение',pr,`Расхождений ${cnt}/${N}; напр. ${fmtEnv(diff.e)}: схема ${diff.a?1:0}, выражение ${diff.b?1:0}`);
-  }
-  saveP();renderPad();renderStatus();
-}
-let answerArmed=false;
-function showAnswer(){
-  const btn=$('#showAnswer');
-  if(!answerArmed){answerArmed=true;btn.textContent='Точно показать? Это попадёт в журнал';btn.classList.add('danger');setTimeout(()=>{answerArmed=false;btn.textContent='Показать ответ';btn.classList.remove('danger')},4000);return}
-  answerArmed=false;btn.textContent='Показать ответ';btn.classList.remove('danger');
-  const p=P();p.answerShown=true;saveP();
-  showMsg('#exprMsg','info',`Одно из правильных выражений:<div class="answer">F = ${esc(treeToExpr(S.tree))}</div>`);
-  addLog('Ответ','—','Ученик открыл эталонный ответ');renderStatus();
+  const reqs=n.req.length?`<div class="d-sec"><h3>Опирается на</h3><ul class="reqs">${n.req.map(r=>{const rn=B[r],ok=AL.node(r).mastered;
+      return `<li><span class="dotl ${ok?'ok':''}"></span><button class="linkish" data-goto="${r}">${esc(rn.num)} · ${esc(rn.title)}</button><span class="tries">${ok?'освоено':AL.isBuilt(rn)?'не освоено':'тренажёр готовится, не мешает'}</span></li>`}).join('')}</ul></div>`:'';
+  const goal=n.goal?`<div class="d-sec"><h3>Как засчитывается</h3><p>${esc(n.goal)}</p>${i.st.total?`<div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="${i.st.total}" aria-valuenow="${i.st.done}"><i style="width:${Math.round(i.p*100)}%"></i></div><span class="tries">${esc(i.st.note||'')}</span>`:''}</div>`:'';
+  const exam=n.exam?`<div class="d-sec"><h3>Зачёт</h3><p>${esc(n.exam)}</p></div>`:'';
+  $('#hNodeBody').innerHTML=`<div class="modal-h d-head"><span class="lamp-l s-${i.s}" style="--p:${i.p}"></span><h2 id="hNodeTitle"><span class="num">${esc(n.num)}</span>${esc(n.title)}</h2><button class="btn ghost" data-close aria-label="Закрыть">✕</button></div>
+    <span class="chip ${i.s==='mastered'?'ok':''}"><span class="dot"></span>${esc(i.line)}</span>
+    <div class="d-sec"><h3>${n.lane==='ege'?'Источник':'По ФРП'}</h3><p>${esc(n.frp)}</p></div>
+    <div class="d-sec"><h3>Что делаешь</h3><p>${esc(n.does)}</p></div>
+    ${goal}${exam}${reqs}${acts}`;
+  openModal('#hNode');
 }
 
 /* ---------- журнал ---------- */
-let logTab='err';
-const fmtTime=t=>{const d=new Date(t);return d.toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit'})+' '+d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit',second:'2-digit'})};
+const fmtTime=t=>{const d=new Date(t);return d.toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit'})+' '+d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})};
 function renderLog(){
-  const only=$('#onlyCur').checked;
-  $('#tabErr').setAttribute('aria-selected',logTab==='err');$('#tabSch').setAttribute('aria-selected',logTab==='sch');
-  if(logTab==='err'){
-    const rows=log.filter(l=>!only||l.seed===S.seed).slice().reverse();
-    $('#logBody').innerHTML=rows.length?`<table class="log"><thead><tr><th>Время</th><th>Схема</th><th>Ученик</th><th>Этап</th><th>Ввод</th><th>Комментарий</th></tr></thead><tbody>${rows.map(l=>{
-      const tg=l.stage==='Таблица'?'t':l.stage==='Выражение'?'e':l.stage==='Верно'?'ok':'a';
-      return `<tr><td class="m">${fmtTime(l.t)}</td><td class="m"><a href="#${esc(l.seed)}">${esc(l.seed)}</a></td><td>${esc(l.student||'—')}</td><td><span class="tag ${tg}">${esc(l.stage)}</span></td><td class="code">${esc(l.input)}</td><td>${esc(l.note)}</td></tr>`}).join('')}</tbody></table>`
-      :`<div class="empty">${only?'По этой схеме записей нет.':'Журнал пуст. Сюда попадают ошибки, правильные ответы и просмотры ответа.'}</div>`;
-    const errs=rows.filter(l=>l.stage==='Таблица'||l.stage==='Выражение').length;
-    $('#logSum').textContent=`Записей: ${rows.length} · ошибок: ${errs}`;
-  }else{
-    const ent=Object.entries(progress).filter(([k])=>!only||k===S.seed).sort((a,b)=>(b[1].first||'').localeCompare(a[1].first||''));
-    $('#logBody').innerHTML=ent.length?`<table class="log"><thead><tr><th>Схема</th><th>Уровень</th><th>Таблица</th><th>Выражение</th><th>Итог</th></tr></thead><tbody>${ent.map(([k,p])=>
-      `<tr><td class="m"><a href="#${esc(k)}">${esc(k)}</a></td><td class="m">${p.level||k[0]}</td><td class="m">${p.tableTries} попыт. ${p.tableOk?'<span class="tag ok">верно</span>':''}</td><td class="m">${p.exprTries} попыт. ${p.exprOk?'<span class="tag ok">верно</span>':''}</td><td>${p.answerShown?'<span class="tag a">ответ показан</span>':p.exprOk?'<span class="tag ok">решено</span>':'в работе'}</td></tr>`).join('')}</tbody></table>`
-      :'<div class="empty">Пока нет открытых схем.</div>';
-    $('#logSum').textContent=`Схем: ${ent.length} · решено: ${ent.filter(e=>e[1].exprOk).length}`;
-  }
+  const rows=AL.allLogs().reverse(),shown=rows.slice(0,400);
+  $('#hLogBody').innerHTML=rows.length?`<table class="log"><thead><tr><th>Время</th><th>Тема</th><th>Схема</th><th>Ученик</th><th>Этап</th><th>Ввод</th><th>Комментарий</th></tr></thead><tbody>${shown.map(l=>{
+    const tg=l.stage==='Таблица'?'t':l.stage==='Выражение'?'e':/Верно|освоена|восстановлен|Код/.test(l.stage)?'ok':'a';
+    return `<tr><td class="m">${fmtTime(l.t)}</td><td>${esc(l.src)}</td><td class="m">${esc(l.seed||'—')}</td><td>${esc(l.student||'—')}</td><td><span class="tag ${tg}">${esc(l.stage)}</span></td><td class="code">${esc(l.input||'')}</td><td>${esc(l.note||'')}</td></tr>`}).join('')}</tbody></table>`
+    :'<div class="empty">Журнал пуст. Сюда попадают ошибки, верные ответы, зачёты и коды.</div>';
+  const errs=rows.filter(l=>l.stage==='Таблица'||l.stage==='Выражение').length;
+  $('#hLogSum').textContent=`Записей: ${rows.length}${rows.length>400?' (показаны последние 400)':''} · ошибок: ${errs}`;
 }
 function logText(){
-  const st=$('#student').value.trim()||'—';
-  const lines=[`Журнал тренажёра логических схем. Ученик: ${st}. Выгружено: ${fmtTime(new Date())}`,'','Время\tСхема\tУченик\tЭтап\tВвод\tКомментарий'];
-  log.forEach(l=>lines.push([fmtTime(l.t),l.seed,l.student||'—',l.stage,l.input,l.note].join('\t')));
-  lines.push('','Схема\tТаблица (попыток/итог)\tВыражение (попыток/итог)\tОтвет показан');
-  Object.entries(progress).forEach(([k,p])=>lines.push([k,`${p.tableTries}/${p.tableOk?'верно':'нет'}`,`${p.exprTries}/${p.exprOk?'верно':'нет'}`,p.answerShown?'да':'нет'].join('\t')));
+  const lines=[`Журнал «Алгебра логики». Ученик: ${AL.student.get()||'—'}. Выгружено: ${fmtTime(new Date())}`,'',
+    'Освоение тем',...N.map(n=>{const st=AL.node(n.id);return `${n.num}\t${n.title}\t${st.mastered?'освоено'+(st.via==='exam'?' (зачёт)':''):st.touched?(st.note||'в работе'):'—'}`}),'',
+    'Время\tТема\tСхема\tУченик\tЭтап\tВвод\tКомментарий'];
+  AL.allLogs().forEach(l=>lines.push([fmtTime(l.t),l.src,l.seed||'—',l.student||'—',l.stage,l.input||'',l.note||''].join('\t')));
   return lines.join('\n');
 }
-let clearArmed=false;
-function toast(t){const el=$('#toast');el.textContent=t;el.classList.add('show');clearTimeout(toast.h);toast.h=setTimeout(()=>el.classList.remove('show'),1800)}
-function copyText(t,okMsg){
-  const fallback=()=>{const ta=$('#copyArea');ta.hidden=false;ta.value=t;ta.focus();ta.select();toast('Выделено: нажми Ctrl+C')};
-  try{navigator.clipboard.writeText(t).then(()=>toast(okMsg),fallback)}catch(e){fallback()}
+
+/* ---------- учитель ---------- */
+function renderTeacher(){
+  const sel=new Set(AL.store.get('teacher.sel',[]));
+  $('#tList').innerHTML=N.map(n=>`<label><input type="checkbox" value="${n.id}" ${sel.has(n.id)?'checked':''}><span class="num">${esc(n.num)}</span>${esc(n.title)}${AL.isBuilt(n)?'':' <span class="tries">· готовится</span>'}</label>`).join('');
+  updTeacherCode();$('#tPreview').checked=AL.preview();
+}
+function updTeacherCode(){
+  const ids=[...document.querySelectorAll('#tList input:checked')].map(i=>i.value);
+  AL.store.set('teacher.sel',ids);
+  $('#tCode').textContent=ids.length?AL.teacherCode(ids):'—';
+}
+
+/* ---------- роутер ---------- */
+function showView(name){
+  $('#view-map').hidden=name!=='map';
+  document.querySelectorAll('[id^="view-t"]').forEach(v=>v.hidden=v.id!=='view-'+name);
+}
+let current=null;
+function route(){
+  const h=decodeURIComponent(location.hash.slice(1));
+  if(/^open-/i.test(h)){const r=AL.applyTeacherCode(h.slice(5));try{history.replaceState(null,'','#map')}catch(e){}route();toast(r.msg);return}
+  const m=h.match(/^(t\d+)(?:-(.+))?$/);
+  if(m&&AL.trainers[m[1]]){
+    const node=N.find(n=>n.trainer===m[1]);
+    if(node&&AL.status(node.id)==='locked'&&m[2]!=='exam'){toast('Эта тема пока закрыта. Посмотри, что нужно освоить.');try{history.replaceState(null,'','#map')}catch(e){}showView('map');renderHub();openNode(node.id);return}
+    closeModals();
+    if(current!==m[1]){showView(m[1]);window.scrollTo(0,0)}
+    current=m[1];AL.trainers[m[1]].enter(m[2]||'');return;
+  }
+  closeModals();
+  if(current!=='map'){showView('map');window.scrollTo(0,0)}
+  current='map';renderHub();
 }
 
 /* ---------- события ---------- */
-$('#circuit').addEventListener('click',e=>{const k=e.target.closest('[data-var]');if(k)toggleVar(k.dataset.var)});
-$('#circuit').addEventListener('keydown',e=>{const k=e.target.closest('[data-var]');if(k&&(e.key==='Enter'||e.key===' ')){e.preventDefault();const v=k.dataset.var;toggleVar(v);const nk=document.querySelector(`#circuit [data-var="${v}"]`);nk&&nk.focus()}});
-$('#varPanel').addEventListener('click',e=>{const b=e.target.closest('[data-var]');if(b)return toggleVar(b.dataset.var);
-  if(e.target.id==='resetVars'){S.vars.forEach(v=>S.env[v]=0);renderCircuit();renderVars();markNowRow()}});
-$('#tt').addEventListener('click',e=>{
-  const f=e.target.closest('.fbtn');if(f){const m=+f.dataset.m,v=S.table[m];setCell(m,v===''?'1':v==='1'?'0':'1');return}
-  const s=e.target.closest('td.set');if(s){const m=+s.dataset.m;Object.assign(S.env,envOf(S.vars,m));renderCircuit();renderVars();markNowRow()}
+$('#hMap').addEventListener('click',e=>{const b=e.target.closest('.mnode');if(b){focusNode(null);openNode(b.dataset.id)}});
+$('#hMap').addEventListener('keydown',e=>{const b=e.target.closest('.mnode');if(b&&(e.key==='Enter'||e.key===' ')){e.preventDefault();focusNode(null);openNode(b.dataset.id)}});
+$('#hMap').addEventListener('pointerover',e=>{const b=e.target.closest('.mnode');if(b&&e.pointerType!=='touch')focusNode(b.dataset.id)});
+$('#hMap').addEventListener('pointerout',e=>{const b=e.target.closest('.mnode');if(b&&!b.contains(e.relatedTarget))focusNode(null)});
+$('#hMap').addEventListener('focusin',e=>{const b=e.target.closest('.mnode');if(b)focusNode(b.dataset.id)});
+$('#hMap').addEventListener('focusout',()=>focusNode(null));
+document.addEventListener('click',e=>{
+  if(e.target.closest('[data-close]')){e.target.closest('.overlay').hidden=true;return}
+  if(e.target.classList.contains('overlay')&&e.target.closest('.hub~.overlay, #hNode, #hCodes, #hTeacher, #hLog')){e.target.hidden=true;return}
+  const g=e.target.closest('[data-goto]');if(g){openNode(g.dataset.goto);return}
+  if(e.target.closest('[data-codes]')){$('#hNode').hidden=true;openCodes();return}
+  if(e.target.closest('#hNode a[href^="#"]'))$('#hNode').hidden=true;
 });
-$('#tt').addEventListener('keydown',e=>{
-  const f=e.target.closest('.fbtn');if(!f)return;const m=+f.dataset.m,N=S.table.length;
-  if(e.key==='0'||e.key==='1'){e.preventDefault();setCell(m,e.key);const nb=document.querySelector(`.fbtn[data-m="${Math.min(m+1,N-1)}"]`);nb&&nb.focus()}
-  else if(e.key==='Backspace'||e.key==='Delete'){e.preventDefault();setCell(m,'')}
-  else if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();const nb=document.querySelector(`.fbtn[data-m="${Math.max(0,Math.min(N-1,m+(e.key==='ArrowDown'?1:-1)))}"]`);nb&&nb.focus()}
-});
-$('#checkTable').onclick=checkTable;
-$('#clearTable').onclick=()=>{S.table=S.table.map(()=>'');S.marks=null;P().draft=null;saveP();hideMsg('#tableMsg');renderTable()};
-$('#expr').addEventListener('input',updPreview);
-$('#expr').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();checkExpr()}});
-$('#pad').addEventListener('click',e=>{
-  const b=e.target.closest('button');if(!b)return;const inp=$('#expr'),ins=b.dataset.ins;
-  let s=inp.selectionStart??inp.value.length,en=inp.selectionEnd??inp.value.length;
-  if(ins==='CLR'){inp.value='';s=0}
-  else if(ins==='BS'){if(s===en&&s>0){inp.value=inp.value.slice(0,s-1)+inp.value.slice(en);s--}else{inp.value=inp.value.slice(0,s)+inp.value.slice(en)}}
-  else{inp.value=inp.value.slice(0,s)+ins+inp.value.slice(en);s+=ins.length}
-  inp.focus();inp.setSelectionRange(s,s);updPreview();
-});
-$('#checkExpr').onclick=checkExpr;
-$('#showAnswer').onclick=showAnswer;
-$('#exprMsg').addEventListener('click',e=>{
-  if(e.target.id==='nextSeed') loadSeed(randomSeed(level));
-  if(e.target.id==='showDiff'){Object.assign(S.env,envOf(S.vars,+e.target.dataset.m));renderCircuit();renderVars();markNowRow();$('#circuit').scrollIntoView({behavior:'smooth',block:'center'})}
-});
-$('#newBtn').onclick=()=>loadSeed(randomSeed(+$('#level').value));
-$('#level').onchange=()=>{level=+$('#level').value;store.set('level',level)};
-const openSeed=()=>{const s=normSeed($('#seed').value,+$('#level').value);if(!s){toast('Введите номер схемы');return}loadSeed(s)};
-$('#openSeed').onclick=openSeed;
-$('#seed').addEventListener('keydown',e=>{if(e.key==='Enter')openSeed()});
-$('#copySeed').onclick=()=>copyText(S.seed,'Номер схемы скопирован: '+S.seed);
-$('#student').value=store.get('student','');
-$('#student').addEventListener('input',()=>store.set('student',$('#student').value));
-$('#logBtn').onclick=()=>{$('#overlay').hidden=false;$('#copyArea').hidden=true;renderLog();$('#closeLog').focus()};
-$('#closeLog').onclick=()=>{$('#overlay').hidden=true};
-$('#overlay').addEventListener('click',e=>{if(e.target.id==='overlay')$('#overlay').hidden=true;if(e.target.closest('a[href^="#"]'))$('#overlay').hidden=true});
-$('#tabErr').onclick=()=>{logTab='err';renderLog()};$('#tabSch').onclick=()=>{logTab='sch';renderLog()};
-$('#onlyCur').onchange=renderLog;
-$('#copyLog').onclick=()=>copyText(logText(),'Журнал скопирован');
-$('#clearLog').onclick=()=>{
-  const b=$('#clearLog');
-  if(!clearArmed){clearArmed=true;b.textContent='Нажми ещё раз: удалить всё';setTimeout(()=>{clearArmed=false;b.textContent='Очистить журнал'},4000);return}
-  clearArmed=false;b.textContent='Очистить журнал';log=[];progress={};saveL();saveP();renderLog();renderAll();toast('Журнал очищен');
-};
-document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'&&!$('#overlay').hidden){$('#overlay').hidden=true;return}
-  const tag=(e.target.tagName||'').toLowerCase();if(tag==='input'||tag==='textarea'||tag==='select'||e.ctrlKey||e.metaKey||e.altKey)return;
-  const k=e.key.toUpperCase();if(S&&S.vars.includes(k)){e.preventDefault();toggleVar(k)}
-});
-window.addEventListener('hashchange',()=>{const s=normSeed(location.hash.slice(1),level);if(s&&(!S||s!==S.seed))loadSeed(s,false)});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModals()});
+$('#hStudent').value=AL.student.get();
+$('#hStudent').addEventListener('input',()=>AL.student.set($('#hStudent').value));
+AL.on('student',v=>{if(document.activeElement!==$('#hStudent'))$('#hStudent').value=v});
+AL.on('progress',()=>{if(!$('#view-map').hidden)renderHub()});
 
-$('#level').value=String(level);
-loadSeed(normSeed(location.hash.slice(1),level)||randomSeed(level));
+function openCodes(){$('#pOut').hidden=true;$('#pCopy').hidden=true;$('#tCodeMsg').className='msg';$('#pMsg').className='msg';openModal('#hCodes')}
+$('#hCodesBtn').onclick=openCodes;
+const showMsg=(sel,cls,txt)=>{const el=$(sel);el.className='msg show '+cls;el.textContent=txt};
+$('#tCodeApply').onclick=()=>{const r=AL.applyTeacherCode($('#tCodeIn').value);showMsg('#tCodeMsg',r.ok?'ok':'bad',r.msg);if(r.ok)$('#tCodeIn').value=''};
+$('#tCodeIn').addEventListener('keydown',e=>{if(e.key==='Enter')$('#tCodeApply').click()});
+$('#pShow').onclick=()=>{$('#pOut').value=AL.exportCode();$('#pOut').hidden=false;$('#pCopy').hidden=false;$('#pOut').select()};
+$('#pCopy').onclick=()=>copyText($('#pOut').value,'Код прогресса скопирован',$('#pOut'));
+$('#pRestore').onclick=()=>{const v=$('#pIn').value.trim();if(!v){showMsg('#pMsg','info','Вставь код в поле выше.');return}
+  const r=AL.importCode(v);showMsg('#pMsg',r.ok?'ok':'bad',r.msg);if(r.ok){$('#pIn').value='';$('#hStudent').value=AL.student.get()}};
+$('#hLogBtn').onclick=AL.openLog=()=>{$('#hLogCopy').hidden=true;renderLog();openModal('#hLog')};
+$('#hLogCopyBtn').onclick=()=>copyText(logText(),'Журнал скопирован',$('#hLogCopy'));
+$('#hTeacherBtn').onclick=()=>{renderTeacher();openModal('#hTeacher')};
+$('#tList').addEventListener('change',updTeacherCode);
+$('#tCopy').onclick=()=>{const c=$('#tCode').textContent;if(c==='—'){toast('Сначала отметь темы');return}copyText(c,'Код скопирован: '+c)};
+$('#tPreview').onchange=()=>{AL.setPreview($('#tPreview').checked);toast($('#tPreview').checked?'Все темы открыты на этом устройстве':'Обычный режим: темы открываются по порядку')};
+
+window.addEventListener('hashchange',route);
+route();
 })();
 </script>
 

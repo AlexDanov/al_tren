@@ -1,0 +1,34 @@
+/* Тренажёр 1 «Высказывания» — на общих токенах al.css */
+.t1 .seg{display:flex;gap:4px;flex-wrap:wrap;background:var(--sheet);border:1px solid var(--rule);border-radius:10px;padding:4px;align-self:flex-start}
+.t1 .seg button{border:0;background:none;border-radius:7px;padding:8px 14px;cursor:pointer;font-weight:500;color:var(--ink-soft);display:inline-flex;gap:8px;align-items:center}
+.t1 .seg button[aria-selected=true]{background:var(--accent);color:var(--sheet)}
+.t1 .seg button[aria-selected=true] .pill{background:var(--sheet);color:var(--accent)}
+.t1 .pill.ok{background:var(--accent-soft);color:var(--accent)}
+.t1.exam .seg{display:none}
+
+.t1 .t1-wrap{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:900px){.t1 .t1-wrap{grid-template-columns:minmax(0,1fr)}}
+.t1 .side .body p{margin:0 0 10px;max-width:60ch}
+.t1 .sent{margin:4px 0 16px;padding:18px 20px;border-left:4px solid var(--accent);background:var(--accent-soft);border-radius:0 10px 10px 0;
+  font-family:var(--f-display);font-weight:500;font-size:clamp(18px,2.6vw,24px);line-height:1.35;text-wrap:balance}
+.t1 .answers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+@media (max-width:620px){.t1 .answers{grid-template-columns:minmax(0,1fr)}}
+.t1 .ans{justify-content:flex-start;padding:11px 12px;white-space:normal;text-align:left;font-weight:500}
+.t1 .ans .k{font-family:var(--f-mono);font-size:12px;border:1px solid var(--rule);border-bottom-width:2px;border-radius:4px;padding:0 5px;color:var(--ink-soft)}
+.t1 .ans.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok);opacity:1}
+.t1 .ans.bad{border-color:var(--bad);background:var(--bad-soft);color:var(--bad);opacity:1}
+.t1 .streak{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:16px}
+.t1 .streak .lbl{margin-right:4px}
+.t1 .streak i{width:16px;height:16px;border-radius:50%;background:var(--lamp-off);border:1.5px solid var(--rule)}
+.t1 .streak i.on{background:var(--glow);border-color:var(--live);box-shadow:0 0 6px var(--glow)}
+.t1 .streak .tries{margin-left:6px}
+
+.t1 .defs{list-style:none;margin:0 0 12px;padding:0;display:flex;flex-direction:column;gap:4px}
+.t1 .defs b{font-family:var(--f-mono);color:var(--accent);font-size:16px}
+.t1 .hard{font-family:var(--f-body);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;vertical-align:middle;
+  background:var(--inv-soft);color:var(--inv);border-radius:99px;padding:2px 8px}
+.t1 .exprline input{flex:1;font-family:var(--f-mono);font-size:18px;padding:9px 12px;border-radius:8px;background:var(--sheet);border:1.5px solid var(--rule);min-width:0}
+.t1 .exprline input:focus{border-color:var(--accent);outline:none}
+.t1 .glos{border-collapse:collapse;width:100%;font-size:14px}
+.t1 .glos td{border-bottom:1px solid var(--rule);padding:7px 4px;vertical-align:top}
+.t1 .glos td:last-child{font-family:var(--f-mono);font-weight:600;color:var(--accent);white-space:nowrap;text-align:right}
