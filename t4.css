@@ -1,0 +1,28 @@
+/* Тренажёр 4 «Тождества» — на общих токенах al.css */
+.t4 .seg{display:flex;gap:4px;flex-wrap:wrap;background:var(--sheet);border:1px solid var(--rule);border-radius:10px;padding:4px;align-self:flex-start}
+.t4 .seg button{border:0;background:none;border-radius:7px;padding:8px 14px;cursor:pointer;font-weight:500;color:var(--ink-soft);display:inline-flex;gap:8px;align-items:center}
+.t4 .seg button[aria-selected=true]{background:var(--accent);color:var(--sheet)}
+.t4 .seg button[aria-selected=true] .pill{background:var(--sheet);color:var(--accent)}
+.t4 .pill.ok{background:var(--accent-soft);color:var(--accent)}
+.t4.exam .seg,.t4.exam .x4-pr{display:none}
+
+.t4 .exprs{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.t4 .ex{font-family:var(--f-mono);font-size:clamp(17px,2.6vw,22px);font-weight:600;overflow-wrap:anywhere}
+.t4 .ex .en{color:var(--live)}
+.t4 .qq{color:var(--ink-soft);font-size:14px;margin-top:2px}
+.t4 .steps-t{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--ink-soft);margin-bottom:10px}
+.t4 .t4tt th.st{font-size:11.5px;font-weight:500;color:var(--ink-soft);border-left:1px dashed var(--rule);padding:4px 6px;white-space:nowrap;max-width:140px;overflow:hidden;text-overflow:ellipsis}
+.t4 .t4tt th.f{border-left:2px solid var(--ink);color:var(--live);min-width:52px}
+.t4 .t4tt td.fc{border-left:1px dashed var(--rule);padding:3px 6px}
+.t4 .t4tt td.fc.fin{border-left:2px solid var(--ink)}
+.t4 .t4tt .fbtn.draft{border-color:var(--rule);color:var(--ink-soft);background:transparent}
+.t4 .t4tt td.diff{background:var(--inv-soft)}
+.t4 .t4tt tr.cex td{background:var(--accent-soft)}
+.t4 .t4tt tr.pick td.n{padding:2px 4px}
+.t4 .rowpick{font:inherit;font-size:12px;font-weight:600;min-width:28px;border:1.5px solid var(--accent);color:var(--accent);background:var(--sheet);border-radius:99px;cursor:pointer;padding:1px 6px}
+.t4 tr.cex .rowpick{background:var(--accent);color:var(--sheet)}
+.t4 #x4VCard.locked .wait{color:var(--ink-soft);margin:0}
+.t4 .verdict{display:flex;flex-wrap:wrap;gap:8px}
+.t4 .vopt{white-space:normal;text-align:left;padding:10px 14px}
+.t4 .vopt.sel{background:var(--accent);border-color:var(--accent);color:var(--sheet)}
+.t4 .cexl{flex-basis:100%;margin:6px 0 0;font-size:14px;color:var(--accent)}
