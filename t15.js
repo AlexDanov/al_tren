@@ -365,6 +365,7 @@ $('#x15Open').onclick=openSeed;$('#x15Seed').addEventListener('keydown',e=>{if(e
 $('#x15Student').value=AL.student.get();
 $('#x15Student').addEventListener('input',()=>AL.student.set($('#x15Student').value));
 AL.on('student',v=>{if(document.activeElement!==$('#x15Student'))$('#x15Student').value=v});
+AL.on('theme',()=>{if(T&&T.type==='alg')renderViz()});  // холст берёт цвета из CSS-переменных
 $('#x15Log').onclick=()=>AL.openLog&&AL.openLog();
 
 function enter(arg){

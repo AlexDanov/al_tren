@@ -1,6 +1,8 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>Карта алгебры логики</title>
 <meta name="claude:viewport-fit-sides" content="cover">
+<script>/* тема до первой отрисовки: выбор ученика важнее системной */
+(function(){try{var t=JSON.parse(localStorage.getItem('al.theme')||'null');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;600&family=Unbounded:wght@500;700&display=swap">
 <link rel="stylesheet" href="al.css">
@@ -30,6 +32,16 @@
 .h-brand h1{font-family:var(--f-display);font-weight:700;font-size:clamp(20px,3vw,28px);margin:0;letter-spacing:-.01em;text-wrap:balance}
 .h-brand p{margin:2px 0 0;color:var(--ink-soft);font-size:13px}
 #hStudent{width:13em}
+
+/* переключатель темы: правый верхний угол страницы */
+.theme-tg{position:absolute;z-index:40;top:calc(env(safe-area-inset-top,0px) + 14px);right:max(14px,env(safe-area-inset-right,0px));
+  width:40px;height:40px;border-radius:50%;border:1px solid var(--rule);background:var(--sheet);color:var(--ink-soft);
+  display:grid;place-items:center;cursor:pointer;padding:0;box-shadow:0 1px 3px color-mix(in srgb,var(--ink) 14%,transparent);transition:color .15s,border-color .15s}
+.theme-tg:hover{color:var(--accent);border-color:var(--accent)}
+.theme-tg svg{width:20px;height:20px;display:block}
+@media (max-width:1380px){.hub>.h-top,.app>.top{padding-right:52px}}
+:root[data-theme="light"]{color-scheme:light}
+.tag.n{background:var(--sheet-grid);color:var(--ink-soft)}
 
 /* сводка */
 .h-summary{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:var(--gap)}
@@ -174,6 +186,7 @@
 @media (max-width:900px){.v-t11.exam .grid{grid-template-areas:"circ" "expr"}}
 </style>
 
+<button class="theme-tg" id="themeTg" type="button"></button>
 <div class="hub" id="view-map">
   <header class="h-top">
     <div class="h-brand">
@@ -473,11 +486,20 @@ const fmtTime=t=>{const d=new Date(t);return d.toLocaleDateString('ru-RU',{day:'
 function renderLog(){
   const rows=AL.allLogs().reverse(),shown=rows.slice(0,400);
   $('#hLogBody').innerHTML=rows.length?`<table class="log"><thead><tr><th>Время</th><th>Тема</th><th>Схема</th><th>Ученик</th><th>Этап</th><th>Ввод</th><th>Комментарий</th></tr></thead><tbody>${shown.map(l=>{
-    const tg=l.stage==='Таблица'?'t':l.stage==='Выражение'?'e':/Верно|освоена|восстановлен|Код/.test(l.stage)?'ok':'a';
+    const tg=logKind(l);
     return `<tr><td class="m">${fmtTime(l.t)}</td><td>${esc(l.src)}</td><td class="m">${esc(l.seed||'—')}</td><td>${esc(l.student||'—')}</td><td><span class="tag ${tg}">${esc(l.stage)}</span></td><td class="code">${esc(l.input||'')}</td><td>${esc(l.note||'')}</td></tr>`}).join('')}</tbody></table>`
     :'<div class="empty">Журнал пуст. Сюда попадают ошибки, верные ответы, зачёты и коды.</div>';
-  const errs=rows.filter(l=>l.stage==='Таблица'||l.stage==='Выражение').length;
-  $('#hLogSum').textContent=`Записей: ${rows.length}${rows.length>400?' (показаны последние 400)':''} · ошибок: ${errs}`;
+  const errs=rows.filter(l=>logKind(l)==='a'&&l.stage!=='Зачёт').length,fails=rows.filter(l=>l.stage==='Зачёт'&&/^Не сдан/.test(l.note||'')).length;
+  $('#hLogSum').textContent=`Записей: ${rows.length}${rows.length>400?' (показаны последние 400)':''} · ошибок в практике: ${errs} · зачётов не сдано: ${fails}`;
+}
+/* вид записи: ok — верно/освоено, a — ошибка, n — служебная (зачёт, подсказка, код, тестовый вход) */
+function logKind(l){
+  const s=l.stage,n=String(l.note||'');
+  if(s==='Верно'||/освоена|восстановлен|^Код/.test(s))return 'ok';
+  if(s==='Шаг')return /верный/.test(n)?'ok':'a';
+  if(s==='Зачёт')return /^Не сдан/.test(n)?'a':'n';
+  if(s==='Подсказка'||s==='Ответ'||s==='Тестовый вход')return 'n';
+  return 'a';
 }
 function logText(){
   const lines=[`Журнал «Алгебра логики». Ученик: ${AL.student.get()||'—'}. Выгружено: ${fmtTime(new Date())}`,'',
@@ -511,7 +533,7 @@ function route(){
   const m=h.match(/^(t\d+)(?:-(.+))?$/);
   if(m&&AL.trainers[m[1]]){
     const node=N.find(n=>n.trainer===m[1]);
-    if(node&&AL.status(node.id)==='locked'&&m[2]!=='exam'){toast('Эта тема пока закрыта. Посмотри, что нужно освоить.');try{history.replaceState(null,'','#map')}catch(e){}showView('map');renderHub();openNode(node.id);return}
+    if(node&&AL.status(node.id)==='locked'&&m[2]!=='exam'&&!pass.has(node.id)){toast('Эта тема пока закрыта. Посмотри, что нужно освоить.');try{history.replaceState(null,'','#map')}catch(e){}showView('map');renderHub();openNode(node.id);return}
     closeModals();
     if(current!==m[1]){showView(m[1]);window.scrollTo(0,0)}
     current=m[1];AL.trainers[m[1]].enter(m[2]||'');return;
@@ -521,9 +543,24 @@ function route(){
   current='map';renderHub();
 }
 
+/* ---------- тестовый вход: Shift+Alt+клик по узлу открывает тренажёр в обход замка (до закрытия вкладки) ---------- */
+const pass=new Set((()=>{try{return JSON.parse(sessionStorage.getItem('al.pass')||'[]')}catch(e){return []}})());
+function testEnter(id){
+  const n=B[id];
+  if(!AL.isBuilt(n)){toast('Тренажёр по этой теме ещё не готов');return}
+  const locked=AL.status(id)==='locked';
+  pass.add(id);try{sessionStorage.setItem('al.pass',JSON.stringify([...pass]))}catch(e){}
+  if(locked)AL.hubLog(id,'Тестовый вход','Shift+Alt+клик','тема была закрыта');
+  location.hash='#'+n.trainer;
+  if(locked)toast('Тестовый вход: тема '+n.num+' открыта в обход карты');
+}
+
 /* ---------- события ---------- */
-$('#hMap').addEventListener('click',e=>{const b=e.target.closest('.mnode');if(b){focusNode(null);openNode(b.dataset.id)}});
-$('#hMap').addEventListener('keydown',e=>{const b=e.target.closest('.mnode');if(b&&(e.key==='Enter'||e.key===' ')){e.preventDefault();focusNode(null);openNode(b.dataset.id)}});
+$('#hMap').addEventListener('click',e=>{const b=e.target.closest('.mnode');if(!b)return;focusNode(null);
+  if(e.shiftKey&&e.altKey){e.preventDefault();testEnter(b.dataset.id);return}
+  openNode(b.dataset.id)});
+$('#hMap').addEventListener('keydown',e=>{const b=e.target.closest('.mnode');if(b&&(e.key==='Enter'||e.key===' ')){e.preventDefault();focusNode(null);
+  if(e.shiftKey&&e.altKey){testEnter(b.dataset.id);return}openNode(b.dataset.id)}});
 $('#hMap').addEventListener('pointerover',e=>{const b=e.target.closest('.mnode');if(b&&e.pointerType!=='touch')focusNode(b.dataset.id)});
 $('#hMap').addEventListener('pointerout',e=>{const b=e.target.closest('.mnode');if(b&&!b.contains(e.relatedTarget))focusNode(null)});
 $('#hMap').addEventListener('focusin',e=>{const b=e.target.closest('.mnode');if(b)focusNode(b.dataset.id)});
@@ -556,6 +593,22 @@ $('#hTeacherBtn').onclick=()=>{renderTeacher();openModal('#hTeacher')};
 $('#tList').addEventListener('change',updTeacherCode);
 $('#tCopy').onclick=()=>{const c=$('#tCode').textContent;if(c==='—'){toast('Сначала отметь темы');return}copyText(c,'Код скопирован: '+c)};
 $('#tPreview').onchange=()=>{AL.setPreview($('#tPreview').checked);toast($('#tPreview').checked?'Все темы открыты на этом устройстве':'Обычный режим: темы открываются по порядку')};
+
+/* ---------- тема ---------- */
+const mq=window.matchMedia?window.matchMedia('(prefers-color-scheme: dark)'):null;
+const root=document.documentElement;
+const effTheme=()=>{const a=root.getAttribute('data-theme');return a==='dark'||a==='light'?a:(mq&&mq.matches?'dark':'light')};
+const I_SUN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.4 5.4L7 7M17 17l1.6 1.6M5.4 18.6L7 17M17 7l1.6-1.6"/></svg>';
+const I_MOON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6z"/></svg>';
+function paintTheme(){const d=effTheme()==='dark',b=$('#themeTg'),t=d?'Включить светлую тему':'Включить тёмную тему';
+  b.innerHTML=d?I_SUN:I_MOON;b.setAttribute('aria-label',t);b.title=t}
+$('#themeTg').onclick=()=>{const t=effTheme()==='dark'?'light':'dark';AL.store.set('theme',t);root.setAttribute('data-theme',t)};
+// если оболочка страницы сама поменяет data-theme, выбор ученика остаётся главным
+if(window.MutationObserver)new MutationObserver(()=>{const want=AL.store.get('theme',null);
+  if((want==='light'||want==='dark')&&root.getAttribute('data-theme')!==want){root.setAttribute('data-theme',want);return}
+  paintTheme();AL.emit('theme',effTheme())}).observe(root,{attributes:true,attributeFilter:['data-theme']});
+if(mq&&mq.addEventListener)mq.addEventListener('change',()=>{paintTheme();AL.emit('theme',effTheme())});
+paintTheme();
 
 window.addEventListener('hashchange',route);
 route();

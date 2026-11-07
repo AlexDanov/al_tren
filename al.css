@@ -29,6 +29,7 @@
   --margin:#5e3540; color-scheme:dark}
 
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 body{background-color:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.45;
   background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
   background-size:20px 20px;
