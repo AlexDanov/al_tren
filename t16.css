@@ -1,0 +1,52 @@
+/* Тренажёр 1а «Логические следствия» — на общих токенах al.css */
+.t16 .t16-wrap{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:16px;align-items:start}
+.t16 .maincol{display:flex;flex-direction:column;gap:16px;min-width:0}
+@media (max-width:900px){.t16 .t16-wrap{grid-template-columns:minmax(0,1fr)}}
+.t16.exam .side,.t16.exam .status{display:none}
+.t16.exam .t16-wrap{grid-template-columns:minmax(0,1fr);max-width:860px}
+
+.t16 .kind{margin-bottom:6px}
+.t16 .kind .tag{font-size:11px;border-radius:4px;padding:1px 7px;letter-spacing:.03em}
+.t16 .sent{margin:4px 0 14px;padding:18px 20px;border-left:4px solid var(--accent);background:var(--accent-soft);border-radius:0 10px 10px 0;
+  font-family:var(--f-display);font-weight:500;font-size:clamp(17px,2.4vw,22px);line-height:1.4;text-wrap:balance}
+.t16 .opts{display:flex;flex-direction:column;gap:8px}
+.t16 .ans{justify-content:flex-start;align-items:baseline;padding:11px 12px;white-space:normal;text-align:left;font-weight:500;gap:10px;flex-wrap:wrap}
+.t16 .ans .k{font-family:var(--f-mono);font-size:12px;border:1px solid var(--rule);border-bottom-width:2px;border-radius:4px;padding:0 5px;color:var(--ink-soft)}
+.t16 .ans .tx{flex:1 1 16em}
+.t16 .ans .fx{font-family:var(--f-mono);font-size:14px;color:var(--accent);margin-left:auto}
+.t16 .ans.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok);opacity:1}
+.t16 .ans.bad{border-color:var(--bad);background:var(--bad-soft);color:var(--bad);opacity:1}
+.t16 .ans.ok .fx,.t16 .ans.bad .fx{color:inherit}
+
+.t16 .defs{list-style:none;margin:0 0 12px;padding:0;display:flex;flex-direction:column;gap:4px}
+.t16 .defs b{font-family:var(--f-mono);color:var(--accent);font-size:15px}
+.t16 .defs .pf{margin-top:4px}
+.t16 .mono{font-family:var(--f-mono)}
+
+.t16 .lawopts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media (max-width:620px){.t16 .lawopts{grid-template-columns:minmax(0,1fr)}}
+.t16 .lawbtn{flex-direction:column;align-items:flex-start;white-space:normal;text-align:left;padding:10px 12px;gap:3px}
+.t16 .lawbtn b{font-weight:600}
+.t16 .lawbtn span{font-family:var(--f-mono);font-size:12.5px;color:var(--ink-soft)}
+.t16 .lawbtn.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok);opacity:1}
+.t16 .lawbtn.bad{border-color:var(--bad);background:var(--bad-soft);color:var(--bad);opacity:1}
+.t16 .lawbtn.ok span,.t16 .lawbtn.bad span{color:inherit}
+
+.t16 .pline{margin:0 0 10px}
+.t16 .pline b{color:var(--live);font-size:16px}
+.t16 table.rev{border-collapse:collapse;width:100%;font-size:14px}
+.t16 .rev th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-soft);padding:6px 8px;border-bottom:2px solid var(--ink)}
+.t16 .rev td{padding:8px;border-bottom:1px solid var(--rule);vertical-align:top}
+.t16 .rev td.f{font-family:var(--f-mono);white-space:nowrap;color:var(--accent)}
+.t16 .rev tr.good td{background:var(--ok-soft)}
+.t16 .rev .ok{color:var(--ok);font-weight:600}
+.t16 .rev .no{color:var(--bad);font-weight:600}
+.t16 .lawline{margin:12px 0 4px}
+.t16 .whyline{margin:0 0 6px;max-width:70ch}
+.t16 h3.sub{font-family:var(--f-display);font-weight:500;font-size:14px;margin:18px 0 8px}
+.t16 .exprline input{flex:1;font-family:var(--f-mono);font-size:18px;padding:9px 12px;border-radius:8px;background:var(--sheet);border:1.5px solid var(--rule);min-width:0}
+.t16 .exprline input:focus{border-color:var(--accent);outline:none}
+
+.t16 table.laws{border-collapse:collapse;width:100%;font-size:13px}
+.t16 .laws td{border-bottom:1px solid var(--rule);padding:6px 4px;vertical-align:top}
+.t16 .laws td:last-child{font-family:var(--f-mono);font-size:12px;color:var(--accent)}

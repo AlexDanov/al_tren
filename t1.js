@@ -262,7 +262,7 @@ function examNext(){
   EX.done=true;const k=EX.res.filter(Boolean).length,n=EX.tasks.length;renderExamBar();
   const sel=mode==='cl'?'#x1ClMsg':'#x1TrMsg';
   if(k===n){AL.report('n1',{mastered:true,via:'exam'});addLog('Верно','зачёт',`Зачёт сдан: ${k} из ${n}`);
-    showMsg(sel,'ok',`<b>Зачёт сдан: ${k} из ${n}.</b> Тема 1 засчитана, на карте открылись темы 2 и 3.<div class="actions"><a class="btn primary" href="#map">На карту навыков</a><button class="btn" id="x1ExStay">Остаться в тренажёре</button></div>`)}
+    showMsg(sel,'ok',`<b>Зачёт сдан: ${k} из ${n}.</b> Тема 1 засчитана, на карте открылись темы 2, 3 и 1а.<div class="actions"><a class="btn primary" href="#map">На карту навыков</a><button class="btn" id="x1ExStay">Остаться в тренажёре</button></div>`)}
   else{addLog('Зачёт','—',`Не сдан: ${k} из ${n}`);
     showMsg(sel,'bad',`<b>Зачёт не сдан: верно ${k} из ${n}.</b> Нужны все восемь. Потренируйся и попробуй снова.<div class="actions"><button class="btn primary" id="x1ExRetry">Сдать ещё раз</button><button class="btn" id="x1ExStay">Тренироваться</button></div>`)}
 }
